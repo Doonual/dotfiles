@@ -1,0 +1,28 @@
+#--- Set font --------------------------------------
+font pango:UbuntuSansMono NF 10
+
+#--- Gaps -------------------------------------------------------
+gaps inner 10
+gaps outer 4
+smart_gaps off
+# Turn off when one window
+
+#--- Disabling the window title -----------------------------------
+default_border pixel 0
+
+#--- Window frame size -------------------------------------------
+for_window [tiling] border pixel 2
+for_window [floating] border pixel 2
+
+#--- Disabling bezel for fullscreen apps ---------------
+smart_borders on
+
+# Frame colours
+#                        Frame      Bg        Indicator Parent frame 
+client.focused          #cad3f5 #cad3f5 #cad3f5 #cad3f5
+client.focused_inactive	#24273a #24273a #24273a #24273a
+client.unfocused    		#24273a #24273a #24273a #24273a
+client.urgent	      		#E78284 #E78284 #E78284 #E78284
+client.placeholder  		#24273a #24273a #24273a #24273a
+
+

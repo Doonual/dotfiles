@@ -1,0 +1,4 @@
+google.com##.GcKpu
+www.google.com##.hdzaWe
+||smartlock.google.com^
+||accounts.google.com/gsi/iframe

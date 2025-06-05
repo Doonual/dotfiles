@@ -1,0 +1,9 @@
+{
+    "version": "1.12.5",
+    "drawerStates": {
+        "settings": {
+            "customcss": false,
+            "window": true
+        }
+    }
+}

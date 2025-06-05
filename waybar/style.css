@@ -18,7 +18,7 @@
 #window,
 #tray{
   /*background-color: rgba(29,31,46, 0.95);*/
-  background-color: rgba(16,40,32,0.6);
+  background-color: rgba(16,40,32,0.4);
   padding: 4px 6px; /* Internal spacing */
   margin-top: 6px; /* Increase external spacing */
   margin-left: 6px; /* Increase outer spacing */
@@ -29,7 +29,7 @@
 
 #clock,
 #custom-power{
-  background-color: rgba(16,40,32,0.6);
+  background-color: rgba(16,40,32,0.4);
   margin-top: 6px; /* 与屏幕顶部留出距离 */
   margin-right: 6px;
   /*margin-bottom: 4px;*/
@@ -40,7 +40,7 @@
 
 #network,
 #custom-lock{
-  background-color: rgba(16,40,32,0.6);
+  background-color: rgba(16,40,32,0.4);
   margin-top: 6px; /* 与屏幕顶部留出距离 */
   margin-left: 6px;
   /*margin-bottom: 4px;*/
@@ -57,7 +57,7 @@
 #custom-temperature,
 #memory,
 #cpu{
-  background-color: rgba(16,40,32,0.6);
+  background-color: rgba(16,40,32,0.4);
   margin-top: 6px; /* 与屏幕顶部留出距离 */
   /*margin-bottom: 4px;*/
   padding: 4px 2px; /* 保持内部间距 */
@@ -86,7 +86,7 @@
 #custom-power:hover,
 /*#workspaces:hover,*/
 #window:hover {
-  background-color: rgba(70, 75, 90, 0.6);
+  background-color: rgba(70, 75, 90, 0.4);
 }
 
 /* 工作区激活状态高亮 */

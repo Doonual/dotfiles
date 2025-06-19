@@ -25,6 +25,7 @@
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = '*',
 	callback = function()
+		vim.opt.modeline = false
 		vim.opt_local.expandtab = false
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4
@@ -185,9 +186,7 @@ vim.opt.rtp:prepend(lazypath)
 --		:Lazy update
 --
 -- NOTE: Here is where you install your plugins.
-
-
-require('lazy').setup({
+local plugins = {
 	--	 NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	--	 tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
@@ -260,7 +259,11 @@ require('lazy').setup({
 	require("plugins/load_nvim-treesitter").get_plugin(),
 	require("plugins/load_vimtex").get_plugin(),
 	require("plugins/load_feline").get_plugin(),
-	--	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
+--	require("plugins/load_omnisharp").get_plugin(),
+--	require("plugins/load_ale").get_plugin(),
+
+
+  --	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	--	init.lua. If you want these files, they are in the repository, so you can just download them and
 	--	place them in the correct locations.
 
@@ -286,7 +289,9 @@ require('lazy').setup({
 	--	Or use telescope!
 	--	In normal mode type `<space>sh` then write `lazy.nvim-plugin`
 	--	you can continue same window with `<space>sr` which resumes last telescope search
-}, {
+}
+
+require('lazy').setup(plugins, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
 		-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
@@ -323,6 +328,7 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
 
 
 

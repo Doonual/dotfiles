@@ -259,8 +259,8 @@ local plugins = {
 	require("plugins/load_nvim-treesitter").get_plugin(),
 	require("plugins/load_vimtex").get_plugin(),
 	require("plugins/load_feline").get_plugin(),
---	require("plugins/load_omnisharp").get_plugin(),
---	require("plugins/load_ale").get_plugin(),
+	require("plugins/load_omnisharp").get_plugin(),
+	require("plugins/load_ale").get_plugin(),
 
 
   --	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the

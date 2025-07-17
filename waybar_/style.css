@@ -1,7 +1,6 @@
 /* Fonts */
 * {
-  /* font-family: "CaskaydiaCove Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Free Solid"; */
-  font-family: "UbuntuSansMono Nerd Font Mono";
+  font-family: "CaskaydiaCove Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Free Solid";
   font-weight: bold;
   font-size: 16px;
   color: #dcdfe1;
@@ -17,48 +16,23 @@
 /* Uniform style */
 #workspaces,
 #window,
-#tray,
-#clock,
-#custom-power,
-#custom-lock,
-#custom-reboot,
-#bluetooth,
-#battery,
-#pulseaudio,
-#backlight,
-#custom-temperature,
-#memory,
-#network,
-#cpu{
-  background-color: rgba(16,40,32,0.4);
-  margin-top: 6px;
-  margin-bottom: 6px;
-}
-
-
-
-#workspaces,
-#window,
 #tray{
+  /*background-color: rgba(29,31,46, 0.95);*/
+  background-color: rgba(16,40,32,0.4);
   padding: 4px 6px; /* Internal spacing */
+  margin-top: 6px; /* Increase external spacing */
   margin-left: 6px; /* Increase outer spacing */
   margin-right: 6px; /* 外部间距增加 */
   border-radius: 10px;
   border-width: 0px;
 }
 
-#clock{
-  margin-right: 6px;
-  margin-left: 6px;
-
-  padding: 4px 2px; /* 保持内部间距 */
-  border-radius: 10px 10px 10px 10px;
-  border-width: 0px;
-}
-
+#clock,
 #custom-power{
+  background-color: rgba(16,40,32,0.4);
+  margin-top: 6px; /* 与屏幕顶部留出距离 */
   margin-right: 6px;
-
+  /*margin-bottom: 4px;*/
   padding: 4px 2px; /* 保持内部间距 */
   border-radius: 0 10px 10px 0;
   border-width: 0px;
@@ -66,8 +40,10 @@
 
 #network,
 #custom-lock{
+  background-color: rgba(16,40,32,0.4);
+  margin-top: 6px; /* 与屏幕顶部留出距离 */
   margin-left: 6px;
-
+  /*margin-bottom: 4px;*/
   padding: 4px 2px; /* 保持内部间距 */
   border-radius: 10px 0 0 10px;
   border-width: 0px;
@@ -81,7 +57,9 @@
 #custom-temperature,
 #memory,
 #cpu{
-
+  background-color: rgba(16,40,32,0.4);
+  margin-top: 6px; /* 与屏幕顶部留出距离 */
+  /*margin-bottom: 4px;*/
   padding: 4px 2px; /* 保持内部间距 */
   border-width: 0px;
 }

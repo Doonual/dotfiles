@@ -5,11 +5,12 @@
   "spacing": 0,
   "modules-left": [
     "hyprland/workspaces",
-  ],
-  "modules-center": [
-    "clock",
     "tray",
+    "custom/lock",
+    "custom/reboot",
+    "custom/power"
   ],
+  "modules-center": [],
   "modules-right": [
     "network",
     "battery",
@@ -19,10 +20,7 @@
     "custom/temperature",
     "memory",
     "cpu",
-    "group/quit",
-    "custom/lock",
-    "custom/reboot",
-    "custom/power",
+    "clock"
   ],
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -45,23 +43,11 @@
       "default": ""
     }
   },
-  "group/quit": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 500,
-      "transition-left-to-right": false,
-    },
-    "modules": [
-      "custom/power",
-      "custom/lock",
-      "custom/reboot",
-    ]
-  },
   "custom/lock": {
-    "format": "<span color='#8A6240'>  </span>",
-    "on-click": "hyprlock",
-    "tooltip": true,
-    "tooltip-format": "Lock"
+  "format": "<span color='#8A6240'>  </span>",
+  "on-click": "hyprlock",
+  "tooltip": true,
+  "tooltip-format": "Lock"
   },
   "custom/reboot": {
     "format": "<span color='#8A6240'>  </span>",

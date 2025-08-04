@@ -108,7 +108,7 @@ vim.opt.scrolloff = 10
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
-vim.opt.confirm = true
+--vim.opt.confirm = true
 
 -- [[ Basic Keymaps ]]
 -- See `:help vim.keymap.set()`
@@ -239,31 +239,54 @@ local plugins = {
 	-- Fuzzy Finder (files, lsp, etc)
 	require("plugins/load_telescope").get_plugin(),
 	--	LSP Plugins
-	require("plugins/load_lazydev").get_plugin(),
+	--require("plugins/load_lazydev").geasdt_plugin(),
 	--	Autoformat	
-	require("plugins/load_conform").get_plugin(),
+	--require("plugins/load_conform").get_plugin(),
 	-- Autocompletion
-	require("plugins/load_blink").get_plugin(),
+	--require("plugins/load_blink").get_plugin(),
 	-- You can easily change to a different colorscheme.
 	--require("plugins/load_tokyonight").get_plugin(),
 	require("plugins/load_catppuccin").get_plugin(),
 	
 	require("plugins/load_transparent").get_plugin(),
-	require("plugins/load_nvim-highlight-colors").get_plugin(),
+	--require("plugins/load_nvim-highlight-colors").get_plugin(),
 	
 	--	Highlight todo, notes, etc in comments
 	require("plugins/load_load_mini").get_plugin(),
-	require("plugins/load_mini").get_plugin(),
+	--require("plugins/load_mini").get_plugin(),
 
 	-- Highlight, edit, and navigate code
-	require("plugins/load_nvim-treesitter").get_plugin(),
-	require("plugins/load_vimtex").get_plugin(),
+	--require("plugins/load_nvim-treesitter").get_plugin(),
+	--require("plugins/load_vimtex").get_plugin(),
 	require("plugins/load_feline").get_plugin(),
-	require("plugins/load_omnisharp").get_plugin(),
-	require("plugins/load_ale").get_plugin(),
+	--require("plugins/load_omnisharp").get_plugin(),
+	--require("plugins/load_ale").get_plugin(),
+	--{
+	--	"prabirshrestha/asyncomplete.vim"
+	--},
+	{
+		"neoclide/coc.nvim",
+		build = "yarn install --frozen-lockfile && yarn build",
+	},
+	--{
+	--	"https://github.com/sheerun/vim-polyglot"
+
+	--},
+	{
+		"neovim/nvim-lspconfig",
+	},
+	{
+		"ranjithshegde/ccls.nvim",
+		config = function()
+			require("ccls").setup({lsp = {use_defaults = true}})
+
+		end
+	},
 
 
-  --	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
+
+
+	--	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	--	init.lua. If you want these files, they are in the repository, so you can just download them and
 	--	place them in the correct locations.
 
@@ -312,8 +335,6 @@ require('lazy').setup(plugins, {
 		},
 	},
 })
-
-
 --require('lspconfig').pylsp.setup {
 --	settings = {
 --	  pylsp = {
@@ -327,7 +348,6 @@ require('lazy').setup(plugins, {
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
 
 
 

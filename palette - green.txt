@@ -1,0 +1,5 @@
+Dark green		Hex: #102820	RGB: (16, 40, 32)
+Hunter green	Hex: #4C6444	RGB: (76, 100, 68)
+Khaki			Hex: #CABA9C	RGB: (202, 186, 156)
+Raw umber		Hex: #8A6240	RGB: (138, 98, 64)
+Cafe noir		Hex: #4D2D18	RGB: (77, 45, 24)

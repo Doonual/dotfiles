@@ -4,7 +4,7 @@
   font-family: "UbuntuSansMono Nerd Font Mono";
   font-weight: bold;
   font-size: 16px;
-  color: #dcdfe1;
+  color: #dcdcdc;
 }
 
 /* Transparent Waybar background */
@@ -30,7 +30,7 @@
 #memory,
 #network,
 #cpu{
-  background-color: rgba(16,40,32,0.4);
+  background-color: rgba(17,17,17,0.4);
   margin-top: 6px;
   margin-bottom: 6px;
 }
@@ -47,6 +47,7 @@
   border-width: 0px;
 }
 
+#battery,
 #clock{
   margin-right: 6px;
   margin-left: 6px;
@@ -56,6 +57,7 @@
   border-width: 0px;
 }
 
+#backlight,
 #custom-power{
   margin-right: 6px;
 
@@ -75,9 +77,7 @@
 
 #custom-reboot,
 #bluetooth,
-#battery,
 #pulseaudio,
-#backlight,
 #custom-temperature,
 #memory,
 #cpu{
@@ -120,7 +120,7 @@
 }
 
 #workspaces button.active {
-  background-color: #61afef; /* 蓝色高亮 */
+  background-color: #E34D43; /* 蓝色高亮 */
   color: #ffffff;
   padding: 2px 8px;
   margin: 0 2px;

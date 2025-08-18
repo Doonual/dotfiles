@@ -261,25 +261,39 @@ local plugins = {
 	require("plugins/load_feline").get_plugin(),
 	--require("plugins/load_omnisharp").get_plugin(),
 	--require("plugins/load_ale").get_plugin(),
-	--{
-	--	"prabirshrestha/asyncomplete.vim"
-	--},
-	{
-		"neoclide/coc.nvim",
-		build = "yarn install --frozen-lockfile && yarn build",
-	},
-	--{
-	--	"https://github.com/sheerun/vim-polyglot"
+	
 
-	--},
+	{
+		"prabirshrestha/asyncomplete.vim",
+	},
+	{
+		"prabirshrestha/asyncomplete-lsp.vim",
+	},
+	{
+		"prabirshrestha/vim-lsp",
+		config = function()
+			vim.cmd([[
+
+			if executable('ccls')
+				au User lsp_setup call lsp#register_server({
+					\ 'name': 'ccls',
+					\ 'cmd': {server_info->['ccls']},
+					\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+					\ 'initialization_options': {},
+					\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+				\ })
+			endif
+
+			]])
+		end
+	},
 	{
 		"neovim/nvim-lspconfig",
 	},
 	{
-		"ranjithshegde/ccls.nvim",
+		"brenoprata10/nvim-highlight-colors",
 		config = function()
-			require("ccls").setup({lsp = {use_defaults = true}})
-
+			require('nvim-highlight-colors').setup({})
 		end
 	},
 

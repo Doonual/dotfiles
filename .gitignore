@@ -1,3 +1,5 @@
 coc-settings.json
 /nvim/lazy-lock.json
 /ranger/plugins/__pycache__/
+
+/fonts/.uuid

@@ -22,14 +22,25 @@
 
 --]]
 
+--[[
+#################################
+########## Indentation ##########
+#################################
+--]]
+
+vim.opt.modeline = false
+vim.opt_local.expandtab = false
+vim.opt_local.tabstop = 4
+vim.opt_local.shiftwidth = 4
+vim.opt_local.softtabstop = 4
+vim.opt.breakindent = true
+
+
 vim.api.nvim_create_autocmd('FileType', {
-	pattern = '*',
+	pattern = {"c","cpp", "cs", "java"},
 	callback = function()
-		vim.opt.modeline = false
-		vim.opt_local.expandtab = false
-		vim.opt_local.tabstop = 4
-		vim.opt_local.shiftwidth = 4
-		vim.opt_local.softtabstop = 4
+		require("plugins/indentation_fixer").load()
+		print("Loaded indentation_fider")
 	end,
 })
 
@@ -67,8 +78,6 @@ vim.schedule(function()
 	vim.opt.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
-vim.opt.breakindent = true
 
 -- Save undo history
 vim.opt.undofile = true
@@ -252,19 +261,45 @@ local plugins = {
 	--require("plugins/load_nvim-highlight-colors").get_plugin(),
 	
 	--	Highlight todo, notes, etc in comments
-	require("plugins/load_load_mini").get_plugin(),
+	--require("plugins/load_load_mini").get_plugin(),
 	--require("plugins/load_mini").get_plugin(),
 
-	-- Highlight, edit, and navigate code
-	--require("plugins/load_nvim-treesitter").get_plugin(),
 	--require("plugins/load_vimtex").get_plugin(),
 	require("plugins/load_feline").get_plugin(),
 	--require("plugins/load_omnisharp").get_plugin(),
 	--require("plugins/load_ale").get_plugin(),
 	
 
+	-- Highlight, edit, and navigate code
+	-- require("plugins/load_nvim-treesitter").get_plugin(),
+	
 	{
 		"prabirshrestha/asyncomplete.vim",
+		config = function()
+
+			on_tab_pressed = function()
+				if vim.fn.pumvisible() == 1 then
+					-- Pop up menu is open
+					return "<C-n>"
+				else
+					-- Pop up menu is closed
+					return "<Tab>"
+				end
+
+			end
+			vim.keymap.set('i', '<Tab>', on_tab_pressed, {expr = true})
+
+			on_shift_tab_pressed = function()
+				if vim.fn.pumvisible() == 1 then
+					return "<C-p>"
+				else
+					return "<S-Tab>"
+				end
+			end
+			vim.keymap.set('i', '<S-Tab>', on_shift_tab_pressed, {expr = true})
+
+
+		end
 	},
 	{
 		"prabirshrestha/asyncomplete-lsp.vim",

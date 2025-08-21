@@ -94,6 +94,11 @@ function M.load()
 			
 			if (moved_line == true) then
 				fix_indent_recursively(cursor_line)
+
+				if (cursor_x_previous == (vim.fn.indent(cursor_line_previous) / 4)) then
+					vim.api.nvim_win_set_cursor(0, {cursor_line, vim.fn.indent(cursor_line) / 4})
+				end
+
 				cursor_x = move_to_highest_indent()
 				local previous_line_x = cursor_x_previous - (vim.fn.indent(cursor_line_previous) / 4)
 				
@@ -190,7 +195,13 @@ function M.load()
 	vim.api.nvim_create_autocmd("TextChanged", {
 		pattern = "*",
 		callback = function()
+
 			fix_if_line_deleted()
+			
+			local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+			fix_indent_recursively(cursor_line - 1)
+			fix_indent_recursively(cursor_line)
+			fix_indent_recursively(cursor_line + 1)
 
 		end
 	})
@@ -199,18 +210,29 @@ function M.load()
 		callback = function()
 		
 			fix_if_line_deleted()
-			local cursor_x = vim.api.nvim_win_get_cursor(0)[2]
-			local cursor_char = get_line_text(cursor_line):sub(cursor_x, cursor_x)
-			if (cursor_char == "{"or cursor_char == "}") then
-				fix_indent_recursively(cursor_line - 1)
-				fix_indent_recursively(cursor_line + 1)
-			end
+			
+
+			local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+			fix_indent_recursively(cursor_line - 1)
+			fix_indent_recursively(cursor_line)
+			fix_indent_recursively(cursor_line + 1)
 			
 
 		end
 	})
 	
-	
+	vim.api.nvim_create_autocmd("InsertCharPre", {
+
+		pattern = "*",
+		callback = function()
+
+			print("char is: " .. vim.v.char)
+
+
+		end
+
+
+	})
 	
 	
 end

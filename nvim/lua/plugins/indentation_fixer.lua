@@ -1,7 +1,15 @@
 local M = {}
 
 function M.load()
-
+	
+	local activate_plugin = function()
+		
+		if vim.bo.modifiable == false or vim.bo.readonly == true then
+			return false
+		else
+			return true
+		end
+	end
 
 	local set_line_text = function(line_number, text)
 		vim.api.nvim_buf_set_lines(0,line_number - 1,line_number, false, {text})
@@ -88,28 +96,27 @@ function M.load()
 		pattern = "*",
 		callback = function()
 
-			cursor_line = vim.fn.line('.')
-			cursor_x = vim.api.nvim_win_get_cursor(0)[2]
-			local moved_line = cursor_line ~= cursor_line_previous
+			if activate_plugin() == true then
 			
-			if (moved_line == true) then
-				fix_indent_recursively(cursor_line)
-
-				if (cursor_x_previous == (vim.fn.indent(cursor_line_previous) / 4)) then
-					vim.api.nvim_win_set_cursor(0, {cursor_line, vim.fn.indent(cursor_line) / 4})
+				cursor_line = vim.fn.line('.')
+				cursor_x = vim.api.nvim_win_get_cursor(0)[2]
+				local moved_line = cursor_line ~= cursor_line_previous
+				
+				if (moved_line == true) then
+					fix_indent_recursively(cursor_line)
+					cursor_x = move_to_highest_indent()
+					local previous_line_x = cursor_x_previous - (vim.fn.indent(cursor_line_previous) / 4)
+					
+					local new_line_x = previous_line_x + (vim.fn.indent(cursor_line) / 4)
+					new_line_x = math.max(0, new_line_x, string.len(get_line_text(cursor_line)))
+					--print(new_Line_x)
+					--vim.api.nvim_win_set_cursor(0, {cursor_line, new_line_x})
 				end
 
-				cursor_x = move_to_highest_indent()
-				local previous_line_x = cursor_x_previous - (vim.fn.indent(cursor_line_previous) / 4)
-				
-				local new_line_x = previous_line_x + (vim.fn.indent(cursor_line) / 4)
-				new_line_x = math.max(0, new_line_x, string.len(get_line_text(cursor_line)))
-				--print(new_Line_x)
-				--vim.api.nvim_win_set_cursor(0, {cursor_line, new_line_x})
-			end
+				cursor_line_previous = cursor_line
+				cursor_x_previous = cursor_x
 
-			cursor_line_previous = cursor_line
-			cursor_x_previous = cursor_x
+			end
 
 		end
 
@@ -118,48 +125,57 @@ function M.load()
 	vim.api.nvim_create_autocmd("CursorMovedI", {
 		pattern = "*",
 		callback = function()
+			
+			if activate_plugin() == true then
+			
+				cursor_line = vim.fn.line('.')
+				cursor_x = vim.api.nvim_win_get_cursor(0)[2]
+				local indentation_level = vim.fn.cindent(cursor_line) / 4
 
-			cursor_line = vim.fn.line('.')
-			cursor_x = vim.api.nvim_win_get_cursor(0)[2]
-			local indentation_level = vim.fn.cindent(cursor_line) / 4
 
-
-			if (cancel == false and cursor_x < indentation_level) then
-				
-				local line_text = get_line_text(cursor_line)
-				local line_text_before_cursor = strip_starting_tabs(line_text:sub(0,cursor_x))
-				if (string.len(line_text_before_cursor) == 0) then
+				if (cancel == false and cursor_x < indentation_level) then
 					
-					local new_cursor_line = cursor_line - 1
-					local new_cursor_x = string.len(get_line_text(cursor_line - 1))
-					local moved_string = strip_starting_tabs(line_text)
-					
-					cursor_line_previous = cursor_line
-					cursor_line = new_cursor_line
-					cursor_x = new_cursor_x
-					
-					set_line_text(cursor_line, get_line_text(cursor_line) .. line_text)
-					vim.api.nvim_win_set_cursor(0, {new_cursor_line, new_cursor_x})
-					delete_line(cursor_line + 1)
+					local line_text = get_line_text(cursor_line)
+					local line_text_before_cursor = strip_starting_tabs(line_text:sub(0,cursor_x))
+					if (string.len(line_text_before_cursor) == 0) then
+						
+						local new_cursor_line = cursor_line - 1
+						local new_cursor_x = string.len(get_line_text(cursor_line - 1))
+						local moved_string = strip_starting_tabs(line_text)
+						
+						cursor_line_previous = cursor_line
+						cursor_line = new_cursor_line
+						cursor_x = new_cursor_x
+						
+						set_line_text(cursor_line, get_line_text(cursor_line) .. line_text)
+						vim.api.nvim_win_set_cursor(0, {new_cursor_line, new_cursor_x})
+						delete_line(cursor_line + 1)
 
+					end
+
+
+					
 				end
 
+				cursor_line_previous = cursor_line
+				cursor_x_previous = cursor_x
 
-				
 			end
-
-			cursor_line_previous = cursor_line
-			cursor_x_previous = cursor_x
-
 		end
 	})
 
 	vim.api.nvim_create_autocmd("InsertLeave", {
-
+		
+		
 		pattern = "*",
 		callback = function()
-			fix_indent_recursively(vim.fn.line('.'))
-			move_to_highest_indent()
+			
+			if activate_plugin() == true then
+				
+				fix_indent_recursively(vim.fn.line('.'))
+				move_to_highest_indent()
+
+			end
 		end
 
 	})
@@ -195,28 +211,25 @@ function M.load()
 	vim.api.nvim_create_autocmd("TextChanged", {
 		pattern = "*",
 		callback = function()
-
-			fix_if_line_deleted()
 			
-			local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
-			fix_indent_recursively(cursor_line - 1)
-			fix_indent_recursively(cursor_line)
-			fix_indent_recursively(cursor_line + 1)
-
+			if activate_plugin() == true then
+				fix_if_line_deleted()
+			end
 		end
 	})
 	vim.api.nvim_create_autocmd("TextChangedI", {
 		pattern = "*",
 		callback = function()
-		
-			fix_if_line_deleted()
 			
-
-			local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
-			fix_indent_recursively(cursor_line - 1)
-			fix_indent_recursively(cursor_line)
-			fix_indent_recursively(cursor_line + 1)
-			
+			if activate_plugin() == true then
+				fix_if_line_deleted()
+				local cursor_x = vim.api.nvim_win_get_cursor(0)[2]
+				local cursor_char = get_line_text(cursor_line):sub(cursor_x, cursor_x)
+				if (cursor_char == "{"or cursor_char == "}") then
+					fix_indent_recursively(cursor_line - 1)
+					fix_indent_recursively(cursor_line + 1)
+				end
+			end
 
 		end
 	})

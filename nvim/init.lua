@@ -40,7 +40,6 @@ vim.api.nvim_create_autocmd('FileType', {
 	pattern = {"c","cpp", "cs", "java"},
 	callback = function()
 		require("plugins/indentation_fixer").load()
-		print("Loaded indentation_fider")
 	end,
 })
 
@@ -274,6 +273,11 @@ local plugins = {
 	-- require("plugins/load_nvim-treesitter").get_plugin(),
 	
 	{
+		"ycm-core/YouCompleteMe",
+
+	},
+	--[[
+	{
 		"prabirshrestha/asyncomplete.vim",
 		config = function()
 
@@ -297,10 +301,11 @@ local plugins = {
 				end
 			end
 			vim.keymap.set('i', '<S-Tab>', on_shift_tab_pressed, {expr = true})
-
+			
 
 		end
 	},
+	--]]
 	{
 		"prabirshrestha/asyncomplete-lsp.vim",
 	},

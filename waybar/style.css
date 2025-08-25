@@ -30,7 +30,7 @@
 #memory,
 #network,
 #cpu{
-  background-color: rgba(17,17,17,0.4);
+  background-color: rgba(17,17,17,0.5);
   margin-top: 6px;
   margin-bottom: 6px;
 }
@@ -52,7 +52,7 @@
   margin-right: 6px;
   margin-left: 6px;
 
-  padding: 4px 2px; /* 保持内部间距 */
+  padding: 4px 4px; /* 保持内部间距 */
   border-radius: 10px 10px 10px 10px;
   border-width: 0px;
 }
@@ -113,14 +113,14 @@
 
 /* 工作区激活状态高亮 */
 #workspaces button:hover{
-  background-color: rgba(97, 175, 239, 0.2);
+  background-color: rgba(32, 128, 224, 0.2);
   padding: 2px 8px;
   margin: 0 2px;
   border-radius: 10px;
 }
 
 #workspaces button.active {
-  background-color: #E34D43; /* 蓝色高亮 */
+  background-color: #2080E0; /* 蓝色高亮 */
   color: #ffffff;
   padding: 2px 8px;
   margin: 0 2px;

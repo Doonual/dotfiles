@@ -270,13 +270,22 @@ local plugins = {
 	
 
 	-- Highlight, edit, and navigate code
-	-- require("plugins/load_nvim-treesitter").get_plugin(),
+	--require("plugins/load_nvim-treesitter").get_plugin(),
 	
+	--{
+	--	"ycm-core/YouCompleteMe",
+	--
+	--},
 	{
-		"ycm-core/YouCompleteMe",
-
+		"lukas-reineke/indent-blankline.nvim",
+		main = "ibl",
+		---@module "ibl"
+		---@type ibl.config
+		opts = {},
+		config = function()
+			require("ibl").setup()
+		end
 	},
-	--[[
 	{
 		"prabirshrestha/asyncomplete.vim",
 		config = function()
@@ -305,7 +314,7 @@ local plugins = {
 
 		end
 	},
-	--]]
+	
 	{
 		"prabirshrestha/asyncomplete-lsp.vim",
 	},

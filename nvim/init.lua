@@ -28,6 +28,8 @@
 #################################
 --]]
 
+
+
 vim.opt.modeline = false
 vim.opt_local.expandtab = false
 vim.opt_local.tabstop = 4
@@ -270,7 +272,7 @@ local plugins = {
 	
 
 	-- Highlight, edit, and navigate code
-	--require("plugins/load_nvim-treesitter").get_plugin(),
+	require("plugins/load_nvim-treesitter").get_plugin(),
 	
 	--{
 	--	"ycm-core/YouCompleteMe",

@@ -31,7 +31,26 @@ function M.load()
 		end
 		return chars_found
 	end
+	
+	local strip_starting_tabs = function(text)
+		local out = text
+		while (out:sub(1,1) == "	") do
+			out = out:sub(2)
+		end
+		
+		return out
 
+	end
+
+	local strip_starting_spaces = function(text)
+		local out = text
+		while (out:sub(1,1) == " ") do
+			out = out:sub(2)
+		end
+		
+		return out
+
+	end
 
 	local get_indent = function(line_num)
 		
@@ -40,9 +59,19 @@ function M.load()
 		for i=1,line_num - 1 do
 			current_indent = current_indent + count_char(get_line_text(i), '{')
 		end
-		for i=1,line_num do
+		for i=1,line_num - 1 do
 			current_indent = current_indent - count_char(get_line_text(i), '}')
 		end
+
+		local line_text = get_line_text(line_num)
+		local current_line = "" .. line_text
+		current_line = strip_starting_tabs(current_line)
+		current_line = strip_starting_spaces(current_line)
+		if current_line:sub(1,1) == '}' then
+			print("On close bracket line: " .. line_num)
+			current_indent = current_indent - 1
+		end
+
 
 		return current_indent
 
@@ -103,15 +132,7 @@ function M.load()
 
 	end
 
-	local strip_starting_tabs = function(text)
-		local out = text
-		while (out:sub(1,1) == "	") do
-			out = out:sub(2)
-		end
-		
-		return out
-
-	end
+	
 
 	local cursor_line = 0
 	local cursor_x = 0
@@ -241,7 +262,22 @@ function M.load()
 		end
 	})
 	
-	
+	vim.api.nvim_create_user_command("FixIndent", function(opts)
+
+		local total_lines = vim.api.nvim_buf_line_count(0)
+		for i=1,total_lines do
+			local line_text = get_line_text(i);
+			line_text = strip_starting_spaces(line_text);
+			set_line_text(i, line_text);
+
+		end
+
+		for i=1,total_lines do
+
+			fix_indent(i)
+
+		end
+	end, { nargs = 0 })
 	
 end
 

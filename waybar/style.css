@@ -30,51 +30,56 @@
 #memory,
 #network,
 #cpu{
-  background-color: rgba(17,17,17,0.5);
+  background-color: rgba(17,17,17,0.8);
   margin-top: 6px;
   margin-bottom: 6px;
+  padding: 4px;
 }
 
+/* Rounded border to the right */
+#pulseaudio,
+#custom-power{
+  margin-right: 6px;
 
-
-#workspaces,
-#window,
-#tray{
-  padding: 4px 6px; /* Internal spacing */
-  margin-left: 6px; /* Increase outer spacing */
-  margin-right: 6px; /* 外部间距增加 */
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   border-width: 0px;
 }
 
+
+/* Rounded border to the left */
+#network,
+#custom-lock{
+  margin-left: 6px;
+
+  border-radius: 10px 0 0 10px;
+  border-width: 0px;
+}
+
+
+/* Rounded border on both sides */
 #battery,
 #clock{
   margin-right: 6px;
   margin-left: 6px;
 
-  padding: 4px 4px; /* 保持内部间距 */
   border-radius: 10px 10px 10px 10px;
   border-width: 0px;
 }
 
-#backlight,
-#custom-power{
-  margin-right: 6px;
 
-  padding: 4px 2px; /* 保持内部间距 */
-  border-radius: 0 10px 10px 0;
-  border-width: 0px;
+
+#workspaces,
+/*#window,*/
+#tray{
+  margin-left: 6px; /* Increase outer spacing */
+  margin-right: 6px; /* 外部间距增加 */
+  border-radius: 10px;
+  border-width: 10px;
 }
 
-#network,
-#custom-lock{
-  margin-left: 6px;
 
-  padding: 4px 2px; /* 保持内部间距 */
-  border-radius: 10px 0 0 10px;
-  border-width: 0px;
-}
 
+/*
 #custom-reboot,
 #bluetooth,
 #pulseaudio,
@@ -82,9 +87,10 @@
 #memory,
 #cpu{
 
-  padding: 4px 2px; /* 保持内部间距 */
+  padding: 4px 2px;  保持内部间距
   border-width: 0px;
 }
+*/
 
 #custpm-temperature.critical,
 #pulseaudio.muted {

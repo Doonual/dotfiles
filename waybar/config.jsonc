@@ -12,8 +12,8 @@
   ],
   "modules-right": [
     "network",
-    "pulseaudio",
     "backlight",
+    "pulseaudio",
     "battery",
     "custom/lock",
     "custom/reboot",

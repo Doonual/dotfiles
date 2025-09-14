@@ -1,22 +1,25 @@
+@import "cols.css";
+
+
 /* Fonts */
 * {
-  /* font-family: "CaskaydiaCove Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Free Solid"; */
   font-family: "UbuntuSansMono Nerd Font Mono";
   font-weight: bold;
   font-size: 20px;
-  color: #dcdcdc;
 }
 
 /* Transparent Waybar background */
-#waybar {
+#waybar
+{
   background-color: rgba(0, 0, 0, 0);
   border: none;
   box-shadow: none;
 }
 
+
 /* Uniform style */
+#audio,
 #workspaces,
-#window,
 #tray,
 #clock,
 #custom-power,
@@ -24,87 +27,133 @@
 #custom-reboot,
 #bluetooth,
 #battery,
-#pulseaudio,
+/*#pulseaudio,
+#ulseaudio-slider,*/
 #backlight,
 #custom-temperature,
 #memory,
 #network,
-#cpu{
-  background-color: rgba(17,17,17,0.8);
+#cpu
+{
   margin-top: 6px;
   margin-bottom: 6px;
-  padding: 4px;
+  padding: 6px;
 }
 
-/* Rounded border to the right */
-#pulseaudio,
-#custom-power{
-  margin-right: 6px;
-
-  border-radius: 0 10px 10px 0;
-  border-width: 0px;
-}
-
-
-/* Rounded border to the left */
-#network,
-#custom-lock{
-  margin-left: 6px;
-
-  border-radius: 10px 0 0 10px;
-  border-width: 0px;
-}
-
-
-/* Rounded border on both sides */
-#battery,
-#clock{
-  margin-right: 6px;
-  margin-left: 6px;
-
-  border-radius: 10px 10px 10px 10px;
-  border-width: 0px;
-}
-
-
-
-#workspaces,
-/*#window,*/
-#tray{
-  margin-left: 6px; /* Increase outer spacing */
-  margin-right: 6px; /* 外部间距增加 */
-  border-radius: 10px;
-  border-width: 10px;
-}
 
 
 
 /*
-#custom-reboot,
-#bluetooth,
-#pulseaudio,
-#custom-temperature,
-#memory,
-#cpu{
-
-  padding: 4px 2px;  保持内部间距
-  border-width: 0px;
-}
+*   #########################################
+*   ################ Colours ################
+*   #########################################
 */
 
-#custpm-temperature.critical,
-#pulseaudio.muted {
-  color: #FF0000;
-  padding-top: 0;
+
+
+/* On surface colours */
+#workspaces,
+#tray,
+#clock,
+#custom-power,
+#custom-lock,
+#custom-reboot
+{
+  color: @on_surface;
+  background-color: @surface;
 }
 
-/* 鼠标悬停变亮一点 */
+
+/* Primary colours */
+#audio,
+#cpu
+{
+  color: @on_primary_container;
+  background-color: @primary_container;
+}
+#audio,
+#cpu
+{
+  background-color: @on_primary;
+}
+
+/* Secondary colours */
+#memory,
+#network
+{
+  color: @on_secondary_container;
+  background-color: @secondary_container;
+}
+#memory:hover,
+#network:hover
+{
+  background-color: @on_secondary;
+}
+
+/* Tertiary colours */
+#clock
+{
+  color: @on_tertiary_container;
+  background-color: @tertiary_container;
+}
+#clock:hover
+{
+  background-color: @on_tertiary;
+}
+
+
+/*
+* #########################################
+* ################ Borders ################
+* #########################################
+*/
+
+
+/* Rounded border to the right */
+#custom-power
+{
+  margin-right: 6px;
+  border-radius: 0 23px 23px 0;
+}
+
+
+/* Rounded border to the left */
+#custom-lock
+{
+  margin-left: 6px;
+  border-radius: 23px 0 0 23px;
+}
+
+
+/* Rounded border on both sides */
+#audio,
+#battery,
+#clock,
+#cpu,
+#memory,
+#network,
+#workspaces,
+#tray
+{
+  margin-right: 6px;
+  margin-left: 6px;
+  border-radius: 23px 23px 23px 23px;
+}
+
+
+
+#custom-temperature.critical,
+#pulseaudio.muted {
+  color: @error;
+}
+
+
+/* Hover col */
 #bluetooth:hover,
 #network:hover,
-/*#tray:hover,*/
+#tray:hover,
 #backlight:hover,
 #battery:hover,
-#pulseaudio:hover,
 #custom-temperature:hover,
 #memory:hover,
 #cpu:hover,
@@ -112,36 +161,24 @@
 #custom-lock:hover,
 #custom-reboot:hover,
 #custom-power:hover,
-/*#workspaces:hover,*/
-#window:hover {
-  background-color: rgba(70, 75, 90, 0.4);
+#window:hover,
+#workspaces button:hover
+{
+  background-color: @surface_container_highest;
 }
 
-/* 工作区激活状态高亮 */
+/*
 #workspaces button:hover{
-  background-color: rgba(32, 128, 224, 0.2);
-  padding: 2px 8px;
-  margin: 0 2px;
-  border-radius: 10px;
+  border-radius: 23px;
 }
+*/
 
 #workspaces button.active {
-  background-color: #2080E0; /* 蓝色高亮 */
-  color: #ffffff;
-  padding: 2px 8px;
-  margin: 0 2px;
-  border-radius: 10px;
+  background-color: @primary_container;
+  color: @on_primary_container;
+  border-radius: 23px;
 }
 
-/* 未激活工作区按钮 */
-#workspaces button {
-  background: transparent;
-  border: none;
-  color: #888888;
-  padding: 2px 8px;
-  margin: 0 2px;
-  font-weight: bold;
-}
 
 #window {
   font-weight: 500;

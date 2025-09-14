@@ -56,30 +56,30 @@
     "max-length": 10
   },
   "custom/lock": {
-    "format": "<span color='#8ed5b1'>  </span>",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
     "on-click": "hyprlock",
     "tooltip": true,
     "tooltip-format": "Lock"
   },
   "custom/reboot": {
-    "format": "<span color='#8ed5b1'>  </span>",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
     "on-click": "systemctl reboot",
     "tooltip": true,
     "tooltip-format": "Restart"
   },
   "custom/power": {
-    "format": "<span color='#8ed5b1'>  </span>",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
     "on-click": "systemctl poweroff",
     "tooltip": true,
     "tooltip-format": "Poweroff"
   },
   "network": {
-    "format-wifi": "<span color='#8ed5b1'> 󰤨 </span>{essid} ",
-    "format-ethernet": "<span color='#8ed5b1'>  </span>Wired ",
-    "tooltip-format": "<span color='#8ed5b1'> 󰅧 </span>{bandwidthUpBytes}  <span color='#8ed5b1'> 󰅢 </span>{bandwidthDownBytes}",
-    "format-linked": "<span color='#8ed5b1'> 󱘖 </span>{ifname} (No IP) ",
-    "format-disconnected": "<span color='#8ed5b1'>  </span>Disconnected ",
-    "format-alt": "<span color='#8ed5b1'> 󰤨 </span>{signalStrength}% ",
+    "format-wifi": "<span color='{{ colors.primary.dark.hex }}'> 󰤨 </span>{essid} ",
+    "format-ethernet": "<span color='{{ colors.primary.dark.hex }}'>  </span>Wired ",
+    "tooltip-format": "<span color='{{ colors.primary.dark.hex }}'> 󰅧 </span>{bandwidthUpBytes}  <span color='{{ colors.primary.dark.hex }}'> 󰅢 </span>{bandwidthDownBytes}",
+    "format-linked": "<span color='{{ colors.primary.dark.hex }}'> 󱘖 </span>{ifname} (No IP) ",
+    "format-disconnected": "<span color='{{ colors.primary.dark.hex }}'>  </span>Disconnected ",
+    "format-alt": "<span color='{{ colors.primary.dark.hex }}'> 󰤨 </span>{signalStrength}% ",
     "interval": 1
   },
   "battery": {
@@ -102,18 +102,18 @@
     "drawer": {},
   },
   "pulseaudio": {
-    "format": "<span color='#8ed5b1'> 󰖁 </span>0% ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'> 󰖁 </span>0% ",
     "format-icons": {
-      "headphone": "<span color='#8ed5b1'>  </span>",
-      "hands-free": "<span color='#8ed5b1'>  </span>",
-      "headset": "<span color='#8ed5b1'>  </span>",
-      "phone": "<span color='#8ed5b1'>  </span>",
-      "portable": "<span color='#8ed5b1'>  </span>",
-      "car": "<span color='#8ed5b1'>  </span>",
+      "headphone": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "hands-free": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "headset": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "phone": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "portable": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "car": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
       "default": [
-        "<span color='#8ed5b1'>  </span>",
-        "<span color='#8ed5b1'>  </span>",
-        "<span color='#8ed5b1'>  </span>"
+        "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+        "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+        "<span color='{{ colors.primary.dark.hex }}'>  </span>"
       ]
     },
     "on-click-right": "pavucontrol -t 3",
@@ -128,24 +128,24 @@
   },
   "custom/temperature": {
     "exec": "sensors | awk '/^Package id 0:/ {print int($4)}'",
-    "format": "<span color='#8ed5b1'> </span>{}°C ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'> </span>{}°C ",
     "interval": 5,
     "tooltip": true,
     "tooltip-format": "当前 CPU 温度: {}°C"
   },
   "memory": {
-    "format": "<span color='#8ed5b1'>  </span>{used:0.1f}G/{total:0.1f}G ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{used:0.1f}G/{total:0.1f}G ",
     "tooltip": true,
     "tooltip-format": "当前内存占比: {used:0.2f}G/{total:0.2f}G"
   },
   "cpu": {
-    "format": "<span color='#8ed5b1'>  </span>{usage}% ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{usage}% ",
     "tooltip": true
   },
   "clock": {
     "interval": 1,
     "timezone": "Australia/Perth",
-    "format": "<span color='#8ed5b1'>  </span>{:%I:%M %p} ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{:%I:%M %p} ",
     "tooltip": true,
     "tooltip-format": "{:L%A, %d %B %Y}"
   },
@@ -170,9 +170,9 @@
     ]
   },
   "bluetooth": {
-    "format": "<span color='#8ed5b1'>  </span>{status} ",
-    "format-connected": "<span color='#8ed5b1'>  </span>{device_alias} ",
-    "format-connected-battery": "<span color='#8ed5b1'>  </span>{device_alias}{device_battery_percentage}% ",
+    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{status} ",
+    "format-connected": "<span color='{{ colors.primary.dark.hex }}'>  </span>{device_alias} ",
+    "format-connected-battery": "<span color='{{ colors.primary.dark.hex }}'>  </span>{device_alias}{device_battery_percentage}% ",
     "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",

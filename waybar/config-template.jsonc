@@ -5,17 +5,17 @@
   "spacing": 0,
   "modules-left": [
     "hyprland/workspaces",
-    "cpu",
-    "memory",
+    "network",
+    "group/audio",
+    "group/light",
   ],
   "modules-center": [
     "clock",
     "tray",
   ],
   "modules-right": [
-    "network",
-    "backlight",
-    "group/audio",
+    "cpu",
+    "memory",
     "battery",
     "custom/lock",
     "custom/reboot",
@@ -46,14 +46,15 @@
     }
   },
   "cpu": {
-    "interval": 10,
-    "format": "{}% ",
-    "max-length": 10
-  },
-  "memory": {
-    "interval": 30,
-    "format": "{}% ",
-    "max-length": 10
+    "interval": 1,
+    "format": " {icon} {usage}% ",
+    "format-icons": [
+      "<span color='#28CD41'>󰍛</span>",
+      "<span color='#67cc28'>󰍛</span>",
+      "<span color='#c1cc28'>󰍛</span>",
+      "<span color='#cc7d28'>󰍛</span>",
+      "<span color='#cc2828'>󰍛</span>"
+    ],
   },
   "custom/lock": {
     "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
@@ -74,12 +75,12 @@
     "tooltip-format": "Poweroff"
   },
   "network": {
-    "format-wifi": "<span color='{{ colors.primary.dark.hex }}'> 󰤨 </span>{essid} ",
-    "format-ethernet": "<span color='{{ colors.primary.dark.hex }}'>  </span>Wired ",
-    "tooltip-format": "<span color='{{ colors.primary.dark.hex }}'> 󰅧 </span>{bandwidthUpBytes}  <span color='{{ colors.primary.dark.hex }}'> 󰅢 </span>{bandwidthDownBytes}",
-    "format-linked": "<span color='{{ colors.primary.dark.hex }}'> 󱘖 </span>{ifname} (No IP) ",
-    "format-disconnected": "<span color='{{ colors.primary.dark.hex }}'>  </span>Disconnected ",
-    "format-alt": "<span color='{{ colors.primary.dark.hex }}'> 󰤨 </span>{signalStrength}% ",
+    "format-wifi": " <span color='#28CD41'></span> {essid} ",
+    "format-ethernet": " <span color='#28CD41'>󱘖</span> Wired ",
+    "tooltip-format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{bandwidthUpBytes}  <span color='{{ colors.primary.dark.hex }}'>  </span>{bandwidthDownBytes}",
+    "format-linked": " <span color='#28CD41'>󱘖</span> {ifname} (No IP) ",
+    "format-disconnected": "<span color='#cc2828'></span> Disconnected ",
+    "format-alt": " <span color='#28CD41'></span> {signalStrength}% ",
     "interval": 1
   },
   "battery": {
@@ -87,10 +88,16 @@
       "warning": 30,
       "critical": 15
     },
-    "format": "<span color='#28CD41'> {icon} </span>{capacity}% ",
+    "format": " {icon} {capacity}% ",
     "format-charging": " 󱐋 {capacity}% ",
 	  "interval": 1,
-    "format-icons": ["󰂎", "󰁼", "󰁿", "󰂁", "󰁹"],
+    "format-icons": [
+      "<span color='#cc2828'>󰂎</span>",
+      "<span color='#cc7d28'>󰁼</span>",
+      "<span color='#c1cc28'>󰁿</span>",
+      "<span color='#67cc28'>󰂁</span>",
+      "<span color='#28CD41'>󰁹</span>"
+    ],
     "tooltip": true
   },
   "group/audio": {
@@ -102,18 +109,21 @@
     "drawer": {},
   },
   "pulseaudio": {
-    "format": "<span color='{{ colors.primary.dark.hex }}'> 󰖁 </span>0% ",
+    "format": "{icon} {volume:3d}%",
     "format-icons": {
-      "headphone": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-      "hands-free": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-      "headset": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-      "phone": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-      "portable": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-      "car": "<span color='{{ colors.primary.dark.hex }}'>  </span>",
+      "headphone": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "hands-free": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "headset": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "phone": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "portable": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "car": "<span color='{{ colors.primary.dark.hex }}'></span>",
+      "muted": "<span color='#cc2828'>LOL</span>",
       "default": [
-        "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-        "<span color='{{ colors.primary.dark.hex }}'>  </span>",
-        "<span color='{{ colors.primary.dark.hex }}'>  </span>"
+        "<span color='#cc2828'></span>",
+        "<span color='#cc7d28'></span>",
+        "<span color='#c1cc28'></span>",
+        "<span color='#67cc28'></span>",
+        "<span color='#28CD41'></span>",
       ]
     },
     "on-click-right": "pavucontrol -t 3",
@@ -134,18 +144,22 @@
     "tooltip-format": "当前 CPU 温度: {}°C"
   },
   "memory": {
-    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{used:0.1f}G/{total:0.1f}G ",
+    "interval": 30,
+    "format": " {icon} {used:0.1f}GiB / {total:0.1f}GiB ",
+    "format-icons": [
+      "<span color='#28CD41'></span>",
+      "<span color='#67cc28'></span>",
+      "<span color='#c1cc28'></span>",
+      "<span color='#cc7d28'></span>",
+      "<span color='#cc2828'></span>"
+    ],
     "tooltip": true,
-    "tooltip-format": "当前内存占比: {used:0.2f}G/{total:0.2f}G"
-  },
-  "cpu": {
-    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{usage}% ",
-    "tooltip": true
+    "tooltip-format": "Memory: {used:0.2f}G/{total:0.2f}G"
   },
   "clock": {
     "interval": 1,
     "timezone": "Australia/Perth",
-    "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{:%I:%M %p} ",
+    "format": "<span color='#28CD41'>  </span>{:%I:%M %p} ",
     "tooltip": true,
     "tooltip-format": "{:L%A, %d %B %Y}"
   },
@@ -153,21 +167,32 @@
     "icon-size": 17,
     "spacing": 6
   },
+  "group/light": {
+    "modules": [
+      "backlight",
+      "backlight/slider"
+    ],
+    "orientation": "horizontal",
+    "drawer": {},
+
+  },
   "backlight": {
     "device": "intel_backlight",
-    "format": "<span color='#FFD700'>{icon}</span>{percent}% ",
+    "format": "<span color='#FFD700'>{icon}</span>{percent:3d}% ",
     "tooltip": true,
     "tooltip-format": "当前屏幕亮度: {percent}%",
     "format-icons": [
-      // "<span color='#696969'> 󰃞 </span>",
-      // "<span color='#A9A9A9'> 󰃝 </span>",
-      // "<span color='#FFFF66'> 󰃟 </span>",
-      // "<span color='#FFD700'> 󰃠 </span>",
-       "<span color='#112C44'> 󰃞 </span>",
-       "<span color='#126172'> 󰃝 </span>",
-       "<span color='#97A899'> 󰃟 </span>",
-      "<span color='#FEEDDB'> 󰃠 </span>"
+       "<span color='#cc2828'> 󰃞 </span>",
+       "<span color='#cc7d28'> 󰃝 </span>",
+       "<span color='#c1cc28'> 󰃝 </span>",
+       "<span color='#67cc28'> 󰃟 </span>",
+       "<span color='#28CD41'> 󰃠 </span>"
     ]
+  },
+  "backlight/slider": {
+    "min": 1,
+    "max": 100,
+    "orientation": "horizontal",
   },
   "bluetooth": {
     "format": "<span color='{{ colors.primary.dark.hex }}'>  </span>{status} ",

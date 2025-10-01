@@ -1,0 +1,64 @@
+@import "../matugen/css-cols.css";
+
+:root {
+    --border-color: @outline;
+    --border-color-active: @primary;
+
+    --bg-color: @surface;
+	opacity: 0.8;
+    --bg-color-hover: @surface_bright;
+
+    --border-radius: 18px;
+    --border-size: 0px;
+    --border-style: solid;
+
+    --text-color: @on_surface;
+
+}
+
+.window {
+}
+
+
+.monitor {
+	--border-color: rgba(0,0,0,0);
+	--bg-color: rgba(0,0,0,0);
+}
+
+.workspace {
+    --border-color: @outline;
+    --bg-color: @surface;
+}
+
+.client {
+	--bg-color: @primary_container;
+	--text-color: @inverse-on-surface;
+}
+
+.client-image {
+}
+
+
+.launcher {
+}
+
+.launcher-input {
+}
+
+.launcher-results {
+}
+
+.launcher-item {
+}
+
+.launcher-exec {
+}
+
+.launcher-key {
+}
+
+.launcher-plugins {
+}
+
+.launcher-plugin {
+}

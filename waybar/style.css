@@ -1,46 +1,22 @@
-@import "cols.css";
+@import "../matugen/css-cols.css";
 
 
 /* Fonts */
 * {
   font-family: "UbuntuSansMono Nerd Font Mono";
   font-weight: bold;
-  font-size: 20px;
+  font-size: 20px; /* (Actually (11x25) but who the FUCK cares that i told it do be 20px, fuck this fucking shit stupid cunt*/
+  margin:0px;
+  padding:0px;
 }
 
 /* Transparent Waybar background */
 #waybar
 {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 255, 0);
   border: none;
   box-shadow: none;
 }
-
-
-/* Uniform style */
-#audio,
-#battery,
-#bluetooth,
-#clock,
-#cpu,
-#custom-power,
-#custom-lock,
-#custom-reboot,
-#custom-temperature,
-#light,
-#memory,
-#network,
-#tray,
-#workspaces
-{
-  margin-top: 6px;
-  margin-bottom: 6px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-
-
-
 
 /*
 *   #########################################
@@ -51,72 +27,72 @@
 
 
 /* Surface colours */
-#workspaces,
-#tray,
+#battery,
 #clock,
-#custom-power,
+#system,
 #custom-lock,
-#custom-reboot
+#custom-reboot,
+#custom-power,
+#tray,
+#workspaces
 {
   color: @on_surface;
   background-color: @surface;
 }
-
-#workspaces:hover,
-#tray:hover,
+#battery:hover,
 #clock:hover,
-#custom-power:hover,
 #custom-lock:hover,
-#custom-reboot:hover
+#custom-reboot:hover,
+#custom-power:hover,
+#tray:hover
 {
   background-color: @surface_bright;
-
 }
 
+
+
 /* Primary colours */
-#battery,
-#network
+#network,
+#memory
 {
   color: @on_primary_container;
   background-color: @primary_container;
+  border-color: @on_primary;
 }
-#battery:hover,
-#network:hover
+#network:hover,
+#memory:hover
 {
-  color: @primary;
-  background-color: @surface;
+  background-color: @outline;
 }
 
 /* Secondary colours */
 #audio,
-#memory
+#cpu
 {
   color: @on_secondary_container;
   background-color: @secondary_container;
+  border-color: @on_secondary;
 }
 
 #audio:hover,
-#memory:hover
+#cpu:hover
 {
-  color: @secondary;
-  background-color: @surface;
+  background-color: @outline;
 }
 
 /* Tertiary colours */
 #clock,
-#cpu,
 #light
 {
   color: @on_tertiary_container;
   background-color: @tertiary_container;
+  border-color: @on_tertiary;
 }
 
 #clock:hover,
-#cpu:hover,
 #light:hover
 {
-  color: @tertiary;
-  background-color: @surface;
+  background-color: @outline;
 }
 
 /*
@@ -126,24 +102,8 @@
 */
 
 
-/* Rounded border to the right */
-#custom-power
-{
-  margin-right: 6px;
-  border-radius: 0 18px 18px 0;
-}
-
-
-/* Rounded border to the left */
-#custom-lock
-{
-  margin-left: 6px;
-  border-radius: 23px 0 0 23px;
-}
-
-
-/* Rounded border on both sides */
-
+/* Circle container - self contained */
+/* Height: 38px */
 #audio,
 #battery,
 #clock,
@@ -151,59 +111,96 @@
 #light,
 #memory,
 #network,
+#system,
+#tray
+{
+
+  margin-top:6px;
+  margin-bottom:6px;
+  margin-left:3px;
+  margin-right:3px;
+
+  padding-left:12px;
+  padding-right:12px;
+
+  border-radius:24px;
+}
+
+/* Circle container - container only */
+#system,
 #workspaces,
 #tray
 {
-  margin-right: 6px;
-  margin-left: 6px;
-  padding-right: 13px;
-  padding-left: 13px;
-  border-radius: 23px 23px 23px 23px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  margin-left: 3px;
+  margin-right: 3px;
+
+
+
+  padding: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  border-radius:24px;
 }
 
 
 
-#custom-temperature.critical,
+/* Circular element */
+/* Height: 27px */
+#custom-lock,
+#custom-reboot,
+#custom-power,
+#tray
+{
+  margin-top: 11px;
+  margin-bottom: 12px;
+
+  margin-left:5px;
+  margin-right:5px;
+
+  padding:0px;
+  padding-left:8px;
+  padding-right:8px;
+
+  border-radius:14px;
+}
+
+/* Circular element for workspace buttons, because they are special little snowflakes and decided that it can be a different size than the rest of the text. Complete fucking retard */
+#workspaces button
+{
+  margin-top: 10px;
+  margin-bottom: 11px;
+
+  margin-left:5px;
+  margin-right:5px;
+
+  padding:0px;
+  padding-left:5px;
+  padding-right:4px;
+
+  border-radius:14px;
+}
+
+
+
+
 #pulseaudio.muted {
   color: @error;
 }
 
 
-/* Hover col */
-/*
-#bluetooth:hover,
-#network:hover,
-#tray:hover,
-#battery:hover,
-#custom-temperature:hover,
-#memory:hover,
-#cpu:hover,
-#clock:hover,
-#custom-lock:hover,
-#custom-reboot:hover,
-#custom-power:hover,
-#window:hover,
-#workspaces button:hover
-{
-  background-color: @surface_container_highest;
-}
-*/
 
 #workspaces button:hover{
-  border-radius: 23px;
+  border-radius: 100px;
 }
 
 
 #workspaces button.active {
-  background-color: @primary;
-  color: @on_primary;
-  border-radius: 23px;
-}
-
-
-#window {
-  font-weight: 500;
-  font-style: italic;
+  background-color: @inverse_surface;
+  color: @inverse_on_surface;
+  border-radius: 14px;
 }
 
 
@@ -226,7 +223,7 @@
     min-height: 0px;
     min-width: 0px;
     opacity: 0;
-    border-radius: 10px;
+    border-radius: 100px;
     background-image: none;
     border: none;
     box-shadow: none;
@@ -235,14 +232,14 @@
 #pulseaudio-slider trough {
     min-height: 20px;
     min-width: 80px;
-    border-radius: 10px;
+    border-radius: 100px;
     border: none;
-    background-color: black;
+    background-color: @surface;
 }
 
 #pulseaudio-slider highlight {
-    min-width: 10px;
-    border-radius: 10px;
+    min-width: 20px;
+    border-radius: 100px;
     border: none;
     background-color: @secondary;
 }
@@ -250,7 +247,8 @@
 
 #backlight-slider highlight {
     min-width: 10px;
-    border-radius: 10px;
+    border-radius: 100px;
     border: none;
     background-color: @tertiary;
 }
+

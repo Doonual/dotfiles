@@ -1,0 +1,7 @@
+[config]
+# ...
+
+[templates.general]
+input_path = '/dev/null'
+output_path = '/dev/null'
+pre_hook = '~/dotfiles/matugen/pre.sh'

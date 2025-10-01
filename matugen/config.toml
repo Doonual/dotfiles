@@ -2,31 +2,43 @@
 # ...
 
 
-
 [templates.hyprland]
 input_path = '~/dotfiles/hypr/cols-template.conf'
 output_path = '~/dotfiles/hypr/cols.conf'
-post_hook = 'hyprctl reload'
+pre_hook = '~/dotfiles/matugen/pre.sh'
+post_hook = '~/dotfiles/matugen/post.sh'
+# post_hook = 'hyprctl reload'
 
 
 
 [templates.waybar-css]
-input_path = 'cols.css'
-output_path = '~/dotfiles/waybar/cols.css'
-post_hook = 'pkill -SIGUSR2 waybar'
+input_path = 'css-cols-template.css'
+output_path = 'css-cols.css'
+# post_hook = 'pkill -SIGUSR2 waybar'
+
+[templates.hyprshell]
+input_path = 'css-cols-template.css'
+output_path = 'css-cols.css'
+# pre_hook = 'pkill -SIGUSR2 hyprshell'
+# post_hook = 'hyprshell run'
+
 [templates.waybar-jsonc]
 input_path = '~/dotfiles/waybar/config-template.jsonc'
 output_path = '~/dotfiles/waybar/config.jsonc'
-post_hook = 'pkill -SIGUSR2 waybar'
+# post_hook = 'pkill -SIGUSR2 waybar'
 
 
 
 [templates.hyprpaper]
 input_path = '~/dotfiles/hypr/hyprpaper-template.conf'
 output_path = '~/dotfiles/hypr/hyprpaper.conf'
-post_hook = 'killall hyprpaper; hyprpaper'
+# post_hook = 'killall hyprpaper; hyprpaper'
 
 [templates.kitty]
 input_path = '~/dotfiles/kitty/matugen-cols-template.conf'
 output_path = '~/dotfiles/kitty/matugen-cols.conf'
-post_hook = 'pkill -SIGUSR1 kitty'
+# post_hook = 'pkill -SIGUSR1 kitty'
+
+
+
+

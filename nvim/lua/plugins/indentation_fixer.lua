@@ -68,7 +68,6 @@ function M.load()
 		current_line = strip_starting_tabs(current_line)
 		current_line = strip_starting_spaces(current_line)
 		if current_line:sub(1,1) == '}' then
-			print("On close bracket line: " .. line_num)
 			current_indent = current_indent - 1
 		end
 
@@ -152,10 +151,10 @@ function M.load()
 			
 
 
-			if (cursor_line ~= cursor_line_previous) then
-				fix_indent_recursively(cursor_line)
-				cursor_x = move_to_highest_indent()
-			end
+			--if (cursor_line ~= cursor_line_previous or true) then
+			fix_indent_recursively(cursor_line)
+			cursor_x = move_to_highest_indent()
+			--end
 
 			cursor_line_previous = cursor_line
 			cursor_x_previous = cursor_x
@@ -163,10 +162,9 @@ function M.load()
 		end
 
 	end
-	local test = 0
+
 	local text_changed_func = function()
 		if activate_plugin() == true then
-			test = test + 1;
 			if (vim.fn.line('.') ~= 1) then
 				fix_indent_recursively(vim.fn.line('.') - 1)
 			end
@@ -228,10 +226,10 @@ function M.load()
 	vim.api.nvim_create_autocmd("InsertLeave", {
 		
 		
-		pattern = "*lol",
+		pattern = "*",
 		callback = function()
-			fix_if_line_deleted()
-			text_changed_func()
+			--fix_if_line_deleted()
+			cursor_moved_func()
 		end
 
 	})

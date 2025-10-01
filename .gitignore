@@ -3,3 +3,10 @@ coc-settings.json
 /ranger/plugins/__pycache__/
 
 /fonts/.uuid
+
+
+/kitty/matugen-cols.conf
+/hypr/cols.conf
+/hypr/hyprpaper.conf
+/matugen/css-cols.css
+/waybar/config.jsonc

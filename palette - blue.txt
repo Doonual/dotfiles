@@ -1,7 +1,0 @@
-Accent		Hex: #E34D4E RGB: (228, 141, 41)
-Text		Hex: #FEEDDB RGB: (254, 237, 219)
-Bright 1	Hex: #97A899 RGB: (151, 168, 153)
-Dark 1		Hex: #126172 RGB: (12, 97, 114)
-Dark 2		Hex: #112C44 RGB: (17, 44, 68)
-
-Accent 2	Hex: #2080E0

@@ -1,0 +1,3 @@
+Link this to
+~/.local/share/kicad/x.x/footprints
+~/.local/share/kicad/x.x/symbols

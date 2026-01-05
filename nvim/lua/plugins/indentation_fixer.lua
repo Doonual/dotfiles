@@ -6,9 +6,15 @@ function M.load()
 		
 		if vim.bo.modifiable == false or vim.bo.readonly == true then
 			return false
-		else
-			return true
 		end
+
+		-- If the user has a redo, don't do anything
+		if (vim.fn.undotree().seq_cur < vim.fn.undotree().seq_last) then
+			return false
+		end
+
+		return true
+
 	end
 	
 	local set_line_text = function(line_number, text)

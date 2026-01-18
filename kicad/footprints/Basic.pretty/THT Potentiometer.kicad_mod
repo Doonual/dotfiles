@@ -3,6 +3,7 @@
 	(generator "pcbnew")
 	(generator_version "9.0")
 	(layer "F.Cu")
+	(tags "Potentiometer")
 	(property "Reference" "REF**"
 		(at -15.55 -14.2 0)
 		(unlocked yes)

@@ -16,3 +16,4 @@ HighlightScrolledLines=false
 
 [Terminal Features]
 BlinkingCursorEnabled=true
+LineNumbers=0

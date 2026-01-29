@@ -28,7 +28,9 @@
 #################################
 --]]
 
-
+vim.deprecate = function()
+	-- Dodgy
+end
 
 vim.opt.modeline = false
 vim.opt_local.expandtab = false
@@ -39,7 +41,7 @@ vim.opt.breakindent = true
 
 
 vim.api.nvim_create_autocmd('FileType', {
-	pattern = {"c","cpp", "cs", "java"},
+	pattern = {"c","cpp", "cs", "java", "rust"},
 	callback = function()
 		require("plugins/indentation_fixer").load()
 	end,
@@ -288,38 +290,39 @@ local plugins = {
 			require("ibl").setup()
 		end
 	},
-	{
-		"prabirshrestha/asyncomplete.vim",
-		config = function()
-
-			on_tab_pressed = function()
-				if vim.fn.pumvisible() == 1 then
-					-- Pop up menu is open
-					return "<C-n>"
-				else
-					-- Pop up menu is closed
-					return "<Tab>"
-				end
-
-			end
-			vim.keymap.set('i', '<Tab>', on_tab_pressed, {expr = true})
-
-			on_shift_tab_pressed = function()
-				if vim.fn.pumvisible() == 1 then
-					return "<C-p>"
-				else
-					return "<S-Tab>"
-				end
-			end
-			vim.keymap.set('i', '<S-Tab>', on_shift_tab_pressed, {expr = true})
-			
-
-		end
-	},
 	
-	{
-		"prabirshrestha/asyncomplete-lsp.vim",
-	},
+	--{
+	--	"prabirshrestha/asyncomplete.vim",
+	--	config = function()
+--
+--			on_tab_pressed = function()
+--				if vim.fn.pumvisible() == 1 then
+--					-- Pop up menu is open
+--					return "<C-n>"
+--				else
+--					-- Pop up menu is closed
+--					return "<Tab>"
+--				end
+--
+--			end
+--			vim.keymap.set('i', '<Tab>', on_tab_pressed, {expr = true})
+--
+--			on_shift_tab_pressed = function()
+--				if vim.fn.pumvisible() == 1 then
+--					return "<C-p>"
+--				else
+--					return "<S-Tab>"
+--				end
+--			end
+--			vim.keymap.set('i', '<S-Tab>', on_shift_tab_pressed, {expr = true})
+--			
+--
+--		end
+--	},
+	
+--	{
+--		"prabirshrestha/asyncomplete-lsp.vim",
+--	},
 	{
 		"prabirshrestha/vim-lsp",
 		config = function()
@@ -341,6 +344,123 @@ local plugins = {
 	{
 		"neovim/nvim-lspconfig",
 	},
+	{
+		"mason-org/mason.nvim",
+		config = function()
+			require("mason").setup()
+		end
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		opts = {},
+		dependencies = {
+			{ "mason-org/mason.nvim", opts = {} },
+			"neovim/nvim-lspconfig",
+		},
+	},
+	{
+		"simrat39/rust-tools.nvim",
+		config = function()
+			local rt = require("rust-tools")
+			rt.setup({
+				server = {
+					on_attach = function(_, bufnr)
+					  -- Hover actions
+					  vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+					  -- Code action groups
+					  vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+					end,
+				},
+			})
+		end
+	},
+	{
+		-- Completiom framework
+		"hrsh7th/nvim-cmp",
+		config = function()
+			local cmp = require'cmp'
+			cmp.setup({
+			  -- Enable LSP snippets
+			  snippet = {
+				expand = function(args)
+					vim.fn["vsnip#anonymous"](args.body)
+				end,
+			  },
+			  mapping = {
+				['<C-p>'] = cmp.mapping.select_prev_item(),
+				['<C-n>'] = cmp.mapping.select_next_item(),
+				-- Add tab support
+				['<S-Tab>'] = cmp.mapping.select_prev_item(),
+				['<Tab>'] = cmp.mapping.select_next_item(),
+				['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
+				['<C-f>'] = cmp.mapping.scroll_docs(4),
+				['<C-Space>'] = cmp.mapping.complete(),
+				['<C-e>'] = cmp.mapping.close(),
+				['<CR>'] = cmp.mapping.confirm({
+				  behavior = cmp.ConfirmBehavior.Insert,
+				  select = true,
+				})
+			  },
+			  -- Installed sources:
+			  sources = {
+				{ name = 'path' },                              -- file paths
+				{ name = 'nvim_lsp', keyword_length = 1 },      -- from language server
+				{ name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
+				{ name = 'nvim_lua', keyword_length = 1},       -- complete neovim's Lua runtime API such vim.lsp.*
+				{ name = 'buffer', keyword_length = 1 },        -- source current buffer
+				{ name = 'vsnip', keyword_length = 1 },         -- nvim-cmp source for vim-vsnip 
+				{ name = 'calc'},                               -- source for math calculation
+			  },
+			  window = {
+				  completion = cmp.config.window.bordered(),
+				  documentation = cmp.config.window.bordered(),
+			  },
+			  formatting = {
+				  fields = {'menu', 'abbr', 'kind'},
+				  format = function(entry, item)
+					  local menu_icon ={
+						  nvim_lsp = 'λ',
+						  vsnip = '⋗',
+						  buffer = 'Ω',
+						  path = '🖫',
+					  }
+					  item.menu = menu_icon[entry.source.name]
+					  return item
+				  end,
+			  },
+			})
+		end
+	},
+	{
+		-- LSP completion source
+		"hrsh7th/cmp-nvim-lsp"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/cmp-nvim-lua"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/cmp-nvim-lsp-signature-help"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/cmp-vsnip"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/cmp-path"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/cmp-buffer"
+	},
+	{
+		-- Useful completion source
+		"hrsh7th/vim-vsnip"
+	},
+	
+
 	{
 		"brenoprata10/nvim-highlight-colors",
 		config = function()
@@ -379,6 +499,8 @@ local plugins = {
 	--	you can continue same window with `<space>sr` which resumes last telescope search
 }
 
+
+
 require('lazy').setup(plugins, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -400,6 +522,29 @@ require('lazy').setup(plugins, {
 		},
 	},
 })
+
+
+--Set completeopt to have a better completion experience
+-- :help completeopt
+-- menuone: popup even when there's only one match
+-- noinsert: Do not insert text until a selection is made
+-- noselect: Do not select, force to select one from the menu
+-- shortness: avoid showing extra messages when using completion
+-- updatetime: set updatetime for CursorHold
+vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
+vim.opt.shortmess = vim.opt.shortmess + { c = true}
+vim.api.nvim_set_option('updatetime', 300) 
+
+-- Fixed column for diagnostics to appear
+-- Show autodiagnostic popup on cursor hover_range
+-- Goto previous / next diagnostic warning / error 
+-- Show inlay_hints more frequently 
+vim.cmd([[
+	set signcolumn=yes
+	autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
+]])
+
+
 --require('lspconfig').pylsp.setup {
 --	settings = {
 --	  pylsp = {

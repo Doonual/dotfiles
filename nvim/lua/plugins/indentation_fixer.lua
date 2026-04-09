@@ -3,7 +3,6 @@ local M = {}
 function M.load()
 	
 	local activate_plugin = function()
-		
 		if vim.bo.modifiable == false or vim.bo.readonly == true then
 			return false
 		end
@@ -38,9 +37,9 @@ function M.load()
 		return chars_found
 	end
 	
-	local strip_starting_tabs = function(text)
+	local strip_starting_whitespace = function(text)
 		local out = text
-		while (out:sub(1,1) == "	") do
+		while (out:sub(1,1) == "	" or out:sub(1,1) == " ") do
 			out = out:sub(2)
 		end
 		
@@ -48,15 +47,6 @@ function M.load()
 
 	end
 
-	local strip_starting_spaces = function(text)
-		local out = text
-		while (out:sub(1,1) == " ") do
-			out = out:sub(2)
-		end
-		
-		return out
-
-	end
 
 	local get_indent = function(line_num)
 		
@@ -67,12 +57,14 @@ function M.load()
 		end
 		for i=1,line_num - 1 do
 			current_indent = current_indent - count_char(get_line_text(i), '}')
+			if current_indent < 0 then
+				current_indent = 0
+			end
 		end
 
 		local line_text = get_line_text(line_num)
 		local current_line = "" .. line_text
-		current_line = strip_starting_tabs(current_line)
-		current_line = strip_starting_spaces(current_line)
+		current_line = strip_starting_whitespace(current_line)
 		if current_line:sub(1,1) == '}' then
 			current_indent = current_indent - 1
 		end
@@ -99,7 +91,10 @@ function M.load()
 		if indent_delta > 0 then
 			-- remove tabs at start
 			for i=0, indent_delta - 1 do
-				set_line_text(line_num, get_line_text(line_num):sub(2))
+				local line_text = get_line_text(line_num);
+				if line_text:sub(1,1) == '	' or line_text:sub(1,1) == ' ' then
+					set_line_text(line_num, get_line_text(line_num):sub(2))
+				end
 			end
 		end
 
@@ -194,7 +189,7 @@ function M.load()
 
 			local text_after_cursor = get_line_text(cursor_line):sub(cursor_x + 1)
 			local text_before_cursor = get_line_text(cursor_line):sub(1,cursor_x)
-			text_after_cursor = strip_starting_tabs(text_after_cursor)
+			text_after_cursor = strip_starting_whitespace(text_after_cursor)
 			set_line_text(cursor_line, text_before_cursor .. text_after_cursor)
 
 
@@ -225,7 +220,7 @@ function M.load()
 	vim.api.nvim_create_autocmd("CursorMovedI", {
 		pattern = "*",
 		callback = function()
-			cursor_moved_func()
+			--cursor_moved_func()
 		end
 	})
 
@@ -234,7 +229,6 @@ function M.load()
 		
 		pattern = "*",
 		callback = function()
-			--fix_if_line_deleted()
 			cursor_moved_func()
 		end
 
@@ -256,7 +250,6 @@ function M.load()
 	vim.api.nvim_create_autocmd("TextChangedI", {
 		pattern = "*",
 		callback = function()
-			
 			if activate_plugin() == true then
 				cursor_moved_func()
 				fix_if_line_deleted()
@@ -271,7 +264,7 @@ function M.load()
 		local total_lines = vim.api.nvim_buf_line_count(0)
 		for i=1,total_lines do
 			local line_text = get_line_text(i);
-			line_text = strip_starting_spaces(line_text);
+			line_text = strip_starting_whitespace(line_text);
 			set_line_text(i, line_text);
 
 		end
@@ -283,6 +276,18 @@ function M.load()
 		end
 	end, { nargs = 0 })
 	
+
+	vim.api.nvim_create_user_command("StripWhitespace", function(opts)
+
+		local current_line = vim.fn.line('.');
+
+		local line_text = get_line_text(current_line);
+		line_text = strip_starting_whitespace(line_text);
+		set_line_text(current_line, line_text);
+
+
+	end, { nargs = 0 })
+
 end
 
 

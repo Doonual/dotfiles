@@ -50,6 +50,10 @@ function M.load()
 
 	local get_indent = function(line_num)
 		
+		if line_num == 0 then
+			return 0;
+		end
+
 		local current_indent = 0
 		
 		for i=1,line_num - 1 do

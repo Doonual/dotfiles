@@ -28,6 +28,19 @@
 #################################
 --]]
 
+-- Fuck vim's shit default indentation off forever
+-- Replace it with my own correct indentation
+vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
+  callback = function()
+    vim.opt_local.autoindent = false
+    vim.opt_local.smartindent = false
+    vim.opt_local.cindent = false
+    vim.opt_local.indentexpr = ""
+  end,
+})
+
+
+
 vim.deprecate = function()
 	-- Dodgy
 end
@@ -280,16 +293,16 @@ local plugins = {
 	--	"ycm-core/YouCompleteMe",
 	--
 	--},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		---@module "ibl"
-		---@type ibl.config
-		opts = {},
-		config = function()
-			require("ibl").setup()
-		end
-	},
+	--{
+	--	"lukas-reineke/indent-blankline.nvim",
+	--	main = "ibl",
+	--	---@module "ibl"
+	--	---@type ibl.config
+	--	opts = {},
+	--	config = function()
+	--		require("ibl").setup()
+	--	end
+	--},
 	
 	--{
 	--	"prabirshrestha/asyncomplete.vim",

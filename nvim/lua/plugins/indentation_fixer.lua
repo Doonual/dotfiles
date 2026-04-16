@@ -1,8 +1,9 @@
 local M = {}
 
-function M.load()
+function M.load(indent_expr, outdent_expr)
 	
-	local activate_plugin = function()
+
+	local plugin_enabled = function()
 		if vim.bo.modifiable == false or vim.bo.readonly == true then
 			return false
 		end
@@ -57,21 +58,35 @@ function M.load()
 		local current_indent = 0
 		
 		for i=1,line_num - 1 do
-			current_indent = current_indent + count_char(get_line_text(i), '{')
-		end
-		for i=1,line_num - 1 do
-			current_indent = current_indent - count_char(get_line_text(i), '}')
-			if current_indent < 0 then
-				current_indent = 0
+
+			local line_text = strip_starting_whitespace(get_line_text(i))
+			for k, indent_pattern in pairs(indent_expr) do
+				if string.find(line_text, indent_pattern) ~= nil then
+					current_indent = current_indent + 1;
+				end
 			end
+
+		end
+		for i=1,line_num do
+
+			local line_text = "" .. strip_starting_whitespace(get_line_text(i))
+			for k, outdent_pattern in pairs(outdent_expr) do
+				if string.find(line_text, outdent_pattern) ~= nil then
+					current_indent = current_indent - 1;
+				end
+				if current_indent < 0 then
+					current_indent = 0
+				end
+			end
+
 		end
 
-		local line_text = get_line_text(line_num)
-		local current_line = "" .. line_text
-		current_line = strip_starting_whitespace(current_line)
-		if current_line:sub(1,1) == '}' then
-			current_indent = current_indent - 1
-		end
+		--local line_text = get_line_text(line_num)
+		--local current_line = "" .. line_text
+		--current_line = strip_starting_whitespace(current_line)
+		--if current_line:sub(1,1) == '}' then
+		--	current_indent = current_indent - 1
+		--end
 
 
 		return current_indent
@@ -148,7 +163,7 @@ function M.load()
 	
 	local cursor_moved_func = function()
 		
-		if activate_plugin() == true then
+		if plugin_enabled() == true then
 			
 
 			cursor_line = vim.fn.line('.')
@@ -169,7 +184,7 @@ function M.load()
 	end
 
 	local text_changed_func = function()
-		if activate_plugin() == true then
+		if plugin_enabled() == true then
 			if (vim.fn.line('.') ~= 1) then
 				fix_indent_recursively(vim.fn.line('.') - 1)
 			end
@@ -244,7 +259,7 @@ function M.load()
 		pattern = "*",
 		callback = function()
 			
-			if activate_plugin() == true then
+			if plugin_enabled() == true then
 				cursor_moved_func()
 				fix_if_line_deleted()
 				text_changed_func()
@@ -254,7 +269,7 @@ function M.load()
 	vim.api.nvim_create_autocmd("TextChangedI", {
 		pattern = "*",
 		callback = function()
-			if activate_plugin() == true then
+			if plugin_enabled() == true then
 				cursor_moved_func()
 				fix_if_line_deleted()
 				text_changed_func()

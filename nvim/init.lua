@@ -56,7 +56,9 @@ vim.opt.breakindent = true
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = {"c","cpp", "cs", "java", "rs", "rust"},
 	callback = function()
-		require("plugins/indentation_fixer").load()
+		local indent_expr = {"{$", "%[$", "%($"}
+		local outdent_expr = {"^/*}", "^/*%]", "^/*%)"}
+		require("plugins/indentation_fixer").load(indent_expr, outdent_expr)
 	end,
 })
 
@@ -188,8 +190,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	end,
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
---   See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
+-- ###########################
+-- ### Lazy Plugin Manager ###
+-- ###########################
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -199,143 +203,41 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
-
---	[[ Configure and install plugins ]]
---
---	To check the current status of your plugins, run
---		:Lazy
---
---	You can press `?` in this menu for help. Use `:q` to close the window
---
---	To update plugins you can run
---		:Lazy update
---
--- NOTE: Here is where you install your plugins.
 local plugins = {
-	--	 NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-	--	 tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-	--	 NOTE: Plugins can also be added by using a table,
-	--	 with the first argument being the link and the following
-	--	 keys can be used to configure plugin behavior/loading/etc.
-	--
-	--	Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-	--
-
-	--	Alternatively, use `config = function() ... end` for full control over the configuration.
-	--	If you prefer to call `setup` explicitly, use:
-	--	{
-	--		'lewis6991/gitsigns.nvim',
-	--		config = function()
-	--			require('gitsigns').setup({
-	--				-- Your gitsigns configuration here
-	--			})
-	--		end,
-	--	}
-	--
-	--	Here is a more advanced example where we pass configuration
-	--	options to `gitsigns.nvim`.
-	--
-	--	See `:help gitsigns` to understand what the configuration keys do
-	--	Adds git related signs to the gutter, as well as utilities for managing changes
 	require("plugins/load_gitsigns").get_plugin(),
-	--	 NOTE: Plugins can also be configured to run Lua code when they are loaded.
-	--
-	--	This is often very useful to both group configuration, as well as handle
-	--	lazy loading plugins that don't need to be loaded immediately at startup.
-	--
-	--	For example, in the following configuration, we use:
-	--		event = 'VimEnter'
-	--
-	--	which loads which-key before all the UI elements are loaded. Events can be
-	--	normal autocommands events (`:help autocmd-events`).
-	--
-	--	Then, because we use the `opts` key (recommended), the configuration runs
-	--	after the plugin has been loaded as `require(MODULE).setup(opts)`.
-	-- Useful plugin to show you pending keybinds.
 	require("plugins/load_which-key").get_plugin(),
-	--	 NOTE: Plugins can specify dependencies.
-	--
-	--	The dependencies are proper plugin specifications as well - anything
-	--	you do for a plugin at the top level, you can do for a dependency.
-	--	
-	--	Use the `dependencies` key to specify the dependencies of a particular plugin
-	
-	-- Fuzzy Finder (files, lsp, etc)
 	require("plugins/load_telescope").get_plugin(),
-	--	LSP Plugins
-	--require("plugins/load_lazydev").geasdt_plugin(),
-	--	Autoformat	
-	--require("plugins/load_conform").get_plugin(),
-	-- Autocompletion
-	--require("plugins/load_blink").get_plugin(),
-	-- You can easily change to a different colorscheme.
+	
+	-- Colour themes
 	--require("plugins/load_tokyonight").get_plugin(),
 	require("plugins/load_catppuccin").get_plugin(),
-	
 	require("plugins/load_transparent").get_plugin(),
-	--require("plugins/load_nvim-highlight-colors").get_plugin(),
+	require("plugins/load_nvim-highlight-colors").get_plugin(),
+	{
+		"brenoprata10/nvim-highlight-colors",
+		config = function()
+			require('nvim-highlight-colors').setup({})
+		end
+	},
 	
-	--	Highlight todo, notes, etc in comments
-	--require("plugins/load_load_mini").get_plugin(),
-	--require("plugins/load_mini").get_plugin(),
-
-	--require("plugins/load_vimtex").get_plugin(),
+	-- Status bar
 	require("plugins/load_feline").get_plugin(),
-	--require("plugins/load_omnisharp").get_plugin(),
-	--require("plugins/load_ale").get_plugin(),
 	
-
 	-- Highlight, edit, and navigate code
 	require("plugins/load_nvim-treesitter").get_plugin(),
-	
-	--{
-	--	"ycm-core/YouCompleteMe",
-	--
-	--},
-	--{
-	--	"lukas-reineke/indent-blankline.nvim",
-	--	main = "ibl",
-	--	---@module "ibl"
-	--	---@type ibl.config
-	--	opts = {},
-	--	config = function()
-	--		require("ibl").setup()
-	--	end
-	--},
-	
-	--{
-	--	"prabirshrestha/asyncomplete.vim",
-	--	config = function()
---
---			on_tab_pressed = function()
---				if vim.fn.pumvisible() == 1 then
---					-- Pop up menu is open
---					return "<C-n>"
---				else
---					-- Pop up menu is closed
---					return "<Tab>"
---				end
---
---			end
---			vim.keymap.set('i', '<Tab>', on_tab_pressed, {expr = true})
---
---			on_shift_tab_pressed = function()
---				if vim.fn.pumvisible() == 1 then
---					return "<C-p>"
---				else
---					return "<S-Tab>"
---				end
---			end
---			vim.keymap.set('i', '<S-Tab>', on_shift_tab_pressed, {expr = true})
---			
---
---		end
---	},
-	
---	{
---		"prabirshrestha/asyncomplete-lsp.vim",
---	},
+	{
+		"m4xshen/autoclose.nvim",
+		config = function()
+			require('autoclose').setup({
+				[";"] = { escape = false, close = false}
+			})
+		end
+	},
+
+	-- ###########
+	-- ### LSP ###
+	-- ###########
 	{
 		"prabirshrestha/vim-lsp",
 		config = function()
@@ -383,34 +285,18 @@ local plugins = {
 		},
 	},
 	{
-		"simrat39/rust-tools.nvim",
-		config = function()
-			local rt = require("rust-tools")
-			rt.setup({
-				server = {
-					on_attach = function(_, bufnr)
-					  -- Hover actions
-					  vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-					  -- Code action groups
-					  vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-					end,
-				},
-			})
-		end
-	},
-	{
 		-- Completiom framework
 		"hrsh7th/nvim-cmp",
 		config = function()
 			local cmp = require'cmp'
 			cmp.setup({
-			  -- Enable LSP snippets
-			  snippet = {
+			-- Enable LSP snippets
+			snippet = {
 				expand = function(args)
 					vim.fn["vsnip#anonymous"](args.body)
 				end,
-			  },
-			  mapping = {
+			},
+			mapping = {
 				['<C-p>'] = cmp.mapping.select_prev_item(),
 				['<C-n>'] = cmp.mapping.select_next_item(),
 				-- Add tab support
@@ -424,9 +310,9 @@ local plugins = {
 				  behavior = cmp.ConfirmBehavior.Insert,
 				  select = true,
 				})
-			  },
-			  -- Installed sources:
-			  sources = {
+			},
+			-- Installed sources:
+			sources = {
 				{ name = 'path' },                              -- file paths
 				{ name = 'nvim_lsp', keyword_length = 1 },      -- from language server
 				{ name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
@@ -486,41 +372,23 @@ local plugins = {
 	
 
 	{
-		"brenoprata10/nvim-highlight-colors",
+		"simrat39/rust-tools.nvim",
 		config = function()
-			require('nvim-highlight-colors').setup({})
+			local rt = require("rust-tools")
+			rt.setup({
+				server = {
+					on_attach = function(_, bufnr)
+					  -- Hover actions
+					  vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+					  -- Code action groups
+					  vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+					end,
+				},
+			})
 		end
 	},
 
 
-
-
-	--	The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
-	--	init.lua. If you want these files, they are in the repository, so you can just download them and
-	--	place them in the correct locations.
-
-	--	 NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-	--
-	--		Here are some example plugins that I've included in the Kickstart repository.
-	--		Uncomment any of the lines below to enable them (you will need to restart nvim).
-	--
-	--	require 'kickstart.plugins.debug',
-	--	require 'kickstart.plugins.indent_line',
-	--	require 'kickstart.plugins.lint',
-	--	require 'kickstart.plugins.autopairs',
-	--	require 'kickstart.plugins.neo-tree',
-	--	require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
-	--	 NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-	--	 This is the easiest way to modularize your config.
-	--
-	--	 Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-	--	{ import = 'custom.plugins' },
-	--
-	--	For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
-	--	Or use telescope!
-	--	In normal mode type `<space>sh` then write `lazy.nvim-plugin`
-	--	you can continue same window with `<space>sr` which resumes last telescope search
 }
 
 

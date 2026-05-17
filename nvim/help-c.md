@@ -20,5 +20,5 @@ If for some reason you cant get a compile_commands.json file, a .ccls file will 
      - `-I../../../../../opt/rocm-6.3.0/include` for "" includes
      - `-isystem../../../../../usr/include` for <> includes
  - Find these paths by running make with the verbose flag `-v`
-
+ - Find these paths also by running `find search_path -iname "header_name.h"`
 

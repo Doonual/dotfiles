@@ -17,8 +17,10 @@ If for some reason you cant get a compile_commands.json file, a .ccls file will 
 
  - Create a file in your project root directory called `.ccl`
  - Enter in relative paths to include directories 
-     - `-I../../../../../opt/rocm-6.3.0/include` for "" includes
-     - `-isystem../../../../../usr/include` for <> includes
+     - `-I../../../../../opt/rocm-6.3.0/include`
+     - `-isystem../../../../../usr/include`
+ - Sometimes it needs both????
  - Find these paths by running make with the verbose flag `-v`
  - Find these paths also by running `find search_path -iname "header_name.h"`
+
 

@@ -56,9 +56,20 @@
 		)
 	)
 	(attr exclude_from_bom)
+	(fp_circle
+		(center 0 0)
+		(end 0 -1)
+		(stroke
+			(width 0.2)
+			(type default)
+		)
+		(fill yes)
+		(layer "F.Cu")
+		(uuid "31381be7-e388-44d2-b021-6c62d596c5bb")
+	)
 	(fp_rect
-		(start -0.75 -0.75)
-		(end 0.75 0.75)
+		(start -1.15 -1.15)
+		(end 1.15 1.15)
 		(stroke
 			(width 0.05)
 			(type default)

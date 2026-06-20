@@ -796,7 +796,7 @@
 			)
 			(polyline
 				(pts
-					(xy 2.096 0) (xy 2.35 0)
+					(xy 2.096 0) (xy 2.54 0)
 				)
 				(stroke
 					(width 0)
@@ -809,7 +809,7 @@
 		)
 		(symbol "Resistor_1_1"
 			(pin passive line
-				(at -4 0 0)
+				(at -3.81 0 0)
 				(length 1.27)
 				(name "~"
 					(effects
@@ -827,7 +827,7 @@
 				)
 			)
 			(pin passive line
-				(at 3.62 0 180)
+				(at 3.81 0 180)
 				(length 1.27)
 				(name "~"
 					(effects
@@ -837,6 +837,88 @@
 					)
 				)
 				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(symbol "Test Point"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at 0 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VALUE"
+			(at 0 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Basic:Test point"
+			(at 0 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "Test Point_0_1"
+			(circle
+				(center 3.048 0)
+				(radius 0.508)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+		)
+		(symbol "Test Point_1_1"
+			(pin passive line
+				(at 0 0 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
 					(effects
 						(font
 							(size 1.27 1.27)

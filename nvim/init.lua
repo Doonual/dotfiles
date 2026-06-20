@@ -343,7 +343,19 @@ local plugins = {
 	},
 	{
 		-- LSP completion source
-		"hrsh7th/cmp-nvim-lsp"
+		"hrsh7th/cmp-nvim-lsp",
+		config = function()
+
+			
+			local capabilities = require('cmp_nvim_lsp').default_capabilities()
+			local lspconfig = require('lspconfig')
+
+			lspconfig.ccls.setup({
+			  capabilities = capabilities,
+			})
+
+
+		end
 	},
 	{
 		-- Useful completion source

@@ -71,16 +71,12 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- [[ Setting options ]]
--- See `:help vim.opt`
---  NOTE: You can change these options as you wish!
--- For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
--- Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+
+-- You can also add relative line numbers, to help with jumping. Experiment for yourself to see if you like it!
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -89,9 +85,6 @@ vim.opt.mouse = 'a'
 vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
--- Schedule the setting after `UiEnter` because it can increase startup-time.
--- Remove this option if you want your OS clipboard to remain independent.
--- See `:help 'clipboard'`
 vim.schedule(function()
 	vim.opt.clipboard = 'unnamedplus'
 end)
@@ -190,6 +183,49 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	end,
 })
 
+
+
+
+
+-- LSP Explanation
+-- An LSP Server is the actual executable that analyzes your code.
+-- For rust that is rust-analyzer
+-- For c++ it is clangd or ccls
+-- For Lua that is lua-ls
+--
+-- An LSP Client is the program running in your code editor
+-- that talks to the Language Server using the Language Server Protocol
+
+
+-- The LSP Client is responsible for starting the LSP server
+-- Rust LSP
+-- Configure neovim's builtin LSP Client to start rust-analyzer
+-- If you're on ArchLinux, make sure you have the rustup and rust-analyzer packages installed
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = {"rs", "rust"},
+	callback = function()
+		vim.lsp.config("rust_analyzer", {
+			cmd = { "rust-analyzer"}
+		})
+		vim.lsp.enable("rust_analyzer")
+	end,
+})
+
+-- C/C++ LSP
+-- Configure neovim's builtin LSP Client to start ccls 
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = {"c", "cpp", "h", "hpp"},
+	callback = function()
+		vim.lsp.config("ccls", {
+			cmd = { "ccls"}
+		})
+		vim.lsp.enable("ccls")
+	end,
+})
+
+
+
+
 -- ###########################
 -- ### Lazy Plugin Manager ###
 -- ###########################
@@ -203,6 +239,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
+
 local plugins = {
 
 	require("plugins/load_gitsigns").get_plugin(),
@@ -239,50 +276,15 @@ local plugins = {
 	-- ### LSP ###
 	-- ###########
 	{
-		"prabirshrestha/vim-lsp",
-		config = function()
-			vim.cmd([[
-
-			if executable('ccls')
-				au User lsp_setup call lsp#register_server({
-					\ 'name': 'ccls',
-					\ 'cmd': {server_info->['ccls']},
-					\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-					\ 'initialization_options': {},
-					\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-				\ })
-			endif
-
-			]])
-		end
-	},
-	{
+		-- Not LSP Client or LSP Server
+		-- This is a helper that provides default configurations for LSP Clients
 		"neovim/nvim-lspconfig",
 		config = function()
 
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 			local lspconfig = require('lspconfig')
 
-			lspconfig.ccls.setup({
-			  capabilities = capabilities,
-			})
-
-
 		end
-	},
-	{
-		"mason-org/mason.nvim",
-		config = function()
-			require("mason").setup()
-		end
-	},
-	{
-		"mason-org/mason-lspconfig.nvim",
-		opts = {},
-		dependencies = {
-			{ "mason-org/mason.nvim", opts = {} },
-			"neovim/nvim-lspconfig",
-		},
 	},
 	{
 		-- Completiom framework
@@ -290,6 +292,7 @@ local plugins = {
 		config = function()
 			local cmp = require'cmp'
 			cmp.setup({
+			preselect = cmp.PreselectMode.None, -- Do not suggest a default option. Fixes a big annoyance
 			-- Enable LSP snippets
 			snippet = {
 				expand = function(args)
@@ -306,10 +309,10 @@ local plugins = {
 				['<C-f>'] = cmp.mapping.scroll_docs(4),
 				['<C-Space>'] = cmp.mapping.complete(),
 				['<C-e>'] = cmp.mapping.close(),
-				['<CR>'] = cmp.mapping.confirm({
-				  behavior = cmp.ConfirmBehavior.Insert,
-				  select = true,
-				})
+				--['<CR>'] = cmp.mapping.confirm({
+				--  behavior = cmp.ConfirmBehavior.Insert,
+				--  select = true,
+				--})
 			},
 			-- Installed sources:
 			sources = {
@@ -317,7 +320,7 @@ local plugins = {
 				{ name = 'nvim_lsp', keyword_length = 1 },      -- from language server
 				{ name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
 				{ name = 'nvim_lua', keyword_length = 1},       -- complete neovim's Lua runtime API such vim.lsp.*
-				{ name = 'buffer', keyword_length = 1 },        -- source current buffer
+				--{ name = 'buffer', keyword_length = 1 },        -- source current buffer. Don't really want this one, it gives suggestions for "text" which loads before anything else, making it feel slow
 				{ name = 'vsnip', keyword_length = 1 },         -- nvim-cmp source for vim-vsnip 
 				{ name = 'calc'},                               -- source for math calculation
 			  },
@@ -342,20 +345,9 @@ local plugins = {
 		end
 	},
 	{
+		-- Provides nvim-cmp with information from 
 		-- LSP completion source
 		"hrsh7th/cmp-nvim-lsp",
-		config = function()
-
-			
-			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-			local lspconfig = require('lspconfig')
-
-			lspconfig.ccls.setup({
-			  capabilities = capabilities,
-			})
-
-
-		end
 	},
 	{
 		-- Useful completion source
@@ -383,27 +375,7 @@ local plugins = {
 	},
 	
 
-	{
-		"simrat39/rust-tools.nvim",
-		config = function()
-			local rt = require("rust-tools")
-			rt.setup({
-				server = {
-					on_attach = function(_, bufnr)
-					  -- Hover actions
-					  vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-					  -- Code action groups
-					  vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-					end,
-				},
-			})
-		end
-	},
-
-
 }
-
-
 
 require('lazy').setup(plugins, {
 	ui = {
@@ -428,6 +400,7 @@ require('lazy').setup(plugins, {
 })
 
 
+
 --Set completeopt to have a better completion experience
 -- :help completeopt
 -- menuone: popup even when there's only one match
@@ -447,22 +420,6 @@ vim.cmd([[
 	set signcolumn=yes
 	autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
-
-
---require('lspconfig').pylsp.setup {
---	settings = {
---	  pylsp = {
---		plugins = {
---		  pycodestyle = { enabled = false }, -- Disable pycodestyle linter
---		},
---	  },
---	},
---}
-
-
-
--- The line beneath this is called `modeline`. See `:help modeline`
-
 
 
 

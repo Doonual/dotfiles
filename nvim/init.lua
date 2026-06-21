@@ -22,6 +22,7 @@
 
 --]]
 
+
 --[[
 #################################
 ########## Indentation ##########
@@ -231,9 +232,10 @@ vim.lsp.config("lua_ls", {
 vim.lsp.enable("lua_ls")
 
 -- Give the diagnostic window a border
+local border_style = "rounded"
 vim.diagnostic.config({
     float = {
-        border = "rounded",
+        border = border_style,
     },
 })
 
@@ -339,8 +341,8 @@ local plugins = {
 				{ name = 'calc'},                               -- source for math calculation
 			  },
 			  window = {
-				  completion = cmp.config.window.bordered({border = "rounded"}),
-				  documentation = cmp.config.window.bordered({border = "rounded"}),
+				  completion = cmp.config.window.bordered({border = border_style}),
+				  documentation = cmp.config.window.bordered({border = border_style}),
 			  },
 			  formatting = {
 				fields = { 'icon', 'abbr', 'kind', 'menu' },
@@ -350,17 +352,70 @@ local plugins = {
 						-- can also be a function to dynamically calculate max width such as
 						-- menu = function() return math.floor(0.45 * vim.o.columns) end,
 						menu = 50, -- leading text (labelDetails)
-						abbr = 50, -- actual suggestion item
+						abbr = function() return math.floor(0.25 * vim.o.columns) end, -- actual suggestion item
 					},
 					ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 					show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 					symbol_map = {
+						--Text = "󰉿",
+						Text = "",
+						Method = "󰆧",
+						Function = "󰊕",
+						Constructor = "",
+						Field = "󰜢",
+						Variable = "󰀫",
+						Class = "󰠱",
+						Interface = "",
+						Module = "",
+						Property = "󰜢",
+						Unit = "󰑭",
+						Value = "󰎠",
+						Enum = "",
+						Keyword = "󰌋",
+						Snippet = "",
+						Color = "󰏘",
+						File = "󰈙",
+						Reference = "󰈇",
+						Folder = "󰉋",
+						EnumMember = "",
+						Constant = "󰏿",
+						Struct = "󰙅",
+						Event = "",
+						Operator = "󰆕",
 						TypeParameter = "", -- Fill in missing one
 					},
 					-- The function below will be called before any actual modifications from lspkind
 					-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
 					before = function (entry, vim_item)
-						vim_item.kind_hl_group = "CmpItemKind" .. vim_item.kind
+						local test = {
+							--Text					= "         Text",
+							Text					= " ",
+							Method					= "       Method",
+							Function				= "     Function",
+							Constructor				= "  Constructor",
+							Field					= "        Field",
+							Variable				= "     Variable",
+							Class					= "        Class",
+							Interface				= "    Interface",
+							Module					= "       Module",
+							Property				= "     Property",
+							Unit					= "         Unit",
+							Value					= "        Value",
+							Enum					= "         Enum",
+							Keyword					= "      Keyword",
+							Snippet					= "      Snippet",
+							Color					= "        Color",
+							File					= "         File",
+							Reference				= "    Reference",
+							Folder					= "       Folder",
+							EnumMember				= "   EnumMember",
+							Constant				= "     Constant",
+							Struct					= "       Struct",
+							Event					= "        Event",
+							Operator				= "     Operator",
+							TypeParameter			= "TypeParameter",
+						}
+						vim_item.kind = test[vim_item.kind]
 						return vim_item
 					end
 				})

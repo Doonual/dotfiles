@@ -40,7 +40,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
 })
 
 
-
 vim.deprecate = function()
 	-- Dodgy
 end
@@ -76,7 +75,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 
 -- You can also add relative line numbers, to help with jumping. Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
+--vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -201,28 +200,42 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- Rust LSP
 -- Configure neovim's builtin LSP Client to start rust-analyzer
 -- If you're on ArchLinux, make sure you have the rustup and rust-analyzer packages installed
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = {"rs", "rust"},
-	callback = function()
-		vim.lsp.config("rust_analyzer", {
-			cmd = { "rust-analyzer"}
-		})
-		vim.lsp.enable("rust_analyzer")
-	end,
+vim.lsp.config("rust_analyzer", {
+	cmd = { "rust-analyzer"},
+	filetypes = {"rs", "rust"}
 })
+vim.lsp.enable("rust_analyzer")
+
+
 
 -- C/C++ LSP
 -- Configure neovim's builtin LSP Client to start ccls 
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = {"c", "cpp", "h", "hpp"},
-	callback = function()
-		vim.lsp.config("ccls", {
-			cmd = { "ccls"}
-		})
-		vim.lsp.enable("ccls")
-	end,
+vim.lsp.config("ccls", {
+	filetypes = {"c", "cpp", "h", "hpp"}
 })
+vim.lsp.enable("ccls")
 
+
+-- Lua LSP
+-- Make sure lua-language-server is executable
+vim.lsp.config("lua_ls", {
+	filetypes = {"lua"},
+	settings = {
+		Lua = {
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+			},
+		},
+	},
+})
+vim.lsp.enable("lua_ls")
+
+-- Give the diagnostic window a border
+vim.diagnostic.config({
+    float = {
+        border = "rounded",
+    },
+})
 
 
 
@@ -249,7 +262,7 @@ local plugins = {
 	-- Colour themes
 	--require("plugins/load_tokyonight").get_plugin(),
 	require("plugins/load_catppuccin").get_plugin(),
-	require("plugins/load_transparent").get_plugin(),
+	--require("plugins/load_transparent").get_plugin(),
 	require("plugins/load_nvim-highlight-colors").get_plugin(),
 	{
 		"brenoprata10/nvim-highlight-colors",
@@ -291,6 +304,7 @@ local plugins = {
 		"hrsh7th/nvim-cmp",
 		config = function()
 			local cmp = require'cmp'
+			local lspkind = require('lspkind')
 			cmp.setup({
 			preselect = cmp.PreselectMode.None, -- Do not suggest a default option. Fixes a big annoyance
 			-- Enable LSP snippets
@@ -325,24 +339,38 @@ local plugins = {
 				{ name = 'calc'},                               -- source for math calculation
 			  },
 			  window = {
-				  completion = cmp.config.window.bordered(),
-				  documentation = cmp.config.window.bordered(),
+				  completion = cmp.config.window.bordered({border = "rounded"}),
+				  documentation = cmp.config.window.bordered({border = "rounded"}),
 			  },
 			  formatting = {
-				  fields = {'menu', 'abbr', 'kind'},
-				  format = function(entry, item)
-					  local menu_icon ={
-						  nvim_lsp = 'λ',
-						  vsnip = '⋗',
-						  buffer = 'Ω',
-						  path = '🖫',
-					  }
-					  item.menu = menu_icon[entry.source.name]
-					  return item
-				  end,
+				fields = { 'icon', 'abbr', 'kind', 'menu' },
+				format = lspkind.cmp_format({
+					maxwidth = {
+						-- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+						-- can also be a function to dynamically calculate max width such as
+						-- menu = function() return math.floor(0.45 * vim.o.columns) end,
+						menu = 50, -- leading text (labelDetails)
+						abbr = 50, -- actual suggestion item
+					},
+					ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+					show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+					symbol_map = {
+						TypeParameter = "", -- Fill in missing one
+					},
+					-- The function below will be called before any actual modifications from lspkind
+					-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+					before = function (entry, vim_item)
+						vim_item.kind_hl_group = "CmpItemKind" .. vim_item.kind
+						return vim_item
+					end
+				})
 			  },
 			})
 		end
+	},
+	{
+		-- Provides nice formatting for nvim-cmp
+		"onsails/lspkind.nvim"
 	},
 	{
 		-- Provides nvim-cmp with information from 
@@ -377,6 +405,7 @@ local plugins = {
 
 }
 
+
 require('lazy').setup(plugins, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -410,7 +439,7 @@ require('lazy').setup(plugins, {
 -- updatetime: set updatetime for CursorHold
 vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
-vim.api.nvim_set_option('updatetime', 300) 
+vim.api.nvim_set_option('updatetime', 300)
 
 -- Fixed column for diagnostics to appear
 -- Show autodiagnostic popup on cursor hover_range

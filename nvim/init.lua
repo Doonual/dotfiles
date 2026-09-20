@@ -40,17 +40,25 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
   end,
 })
 
+-- disable netrw at the very start of your init.lua
+-- For nvim-tree
+--vim.g.loaded_netrw = 1
+--vim.g.loaded_netrwPlugin = 1
 
 vim.deprecate = function()
 	-- Dodgy
 end
 
-vim.opt.modeline = false
-vim.opt_local.expandtab = false
-vim.opt_local.tabstop = 4
-vim.opt_local.shiftwidth = 4
-vim.opt_local.softtabstop = 4
-vim.opt.breakindent = true
+vim.api.nvim_create_autocmd('FileType', {
+	callback = function() 
+		vim.opt.modeline = false
+		vim.opt_local.expandtab = false
+		vim.opt_local.tabstop = 4
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.softtabstop = 4
+		vim.opt.breakindent = true
+	end
+})
 
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -286,6 +294,18 @@ local plugins = {
 			})
 		end
 	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		config = function()
+			-- empty setup using defaults
+			local nvim_tree = require("nvim-tree")
+			nvim_tree.setup()
+		end,
+		opts = {
+			disable_netrw = false,
+			hijack_netrw = true,
+		},
+	},
 
 	-- ###########
 	-- ### LSP ###
@@ -456,9 +476,60 @@ local plugins = {
 		-- Useful completion source
 		"hrsh7th/vim-vsnip"
 	},
-	
+	{
+		-- Useful tools for rust
+		"simrat39/rust-tools.nvim",
+		config = function()
+			local rt = require("rust-tools")
+			
+			rt.setup({
+				server = {
+					on_attach = function(_, bufnr)
+					-- Hover actions
+					vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+					-- Code action groups
+					vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+					end,
+				},
+			})
+		end
+	},
+	{
+		"CRAG666/code_runner.nvim",
+		config = function()
+			require('code_runner').setup({
+				filetype = {
+					java = {
+						"cd $dir &&",
+						"javac $fileName &&",
+						"java $fileNameWithoutExt"
+					},
+					python = "python3 -u",
+					typescript = "deno run",
+					rust = {
+						"cd $dir &&",
+						"cargo run --release"
+						-- "rustc $fileName &&",
+						-- "$dir/$fileNameWithoutExt"
+					},
+					c = "cd $dir && gcc $fileName -o /tmp/$fileNameWithoutExt && /tmp/$fileNameWithoutExt",
+				},
+			})
+
+			vim.keymap.set('n', '<leader>rr', ':RunCode<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>rf', ':RunFile<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>rft', ':RunFile tab<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>rp', ':RunProject<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>rc', ':RunClose<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>crf', ':CRFiletype<CR>', { noremap = true, silent = false })
+			vim.keymap.set('n', '<leader>crp', ':CRProjects<CR>', { noremap = true, silent = false })
+
+
+		end,
+	},
 
 }
+
 
 
 require('lazy').setup(plugins, {

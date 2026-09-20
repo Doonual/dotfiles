@@ -52,6 +52,7 @@ function M.load(indent_expr, outdent_expr)
 	local get_indent = function(line_num)
 		
 		if line_num == 0 then
+			print("Indent" .. 0)
 			return 0;
 		end
 
@@ -124,7 +125,9 @@ function M.load(indent_expr, outdent_expr)
 		cursor_x = vim.api.nvim_win_get_cursor(0)[2]
 		local indent_level = vim.fn.indent(cursor_line) / 4
 		local new_x = math.max(indent_level, cursor_x)
+		if (new_x > cursor_x) then
 		vim.api.nvim_win_set_cursor(0, {cursor_line, math.floor(new_x)})
+		end
 		return new_x
 	end
 

@@ -32,12 +32,12 @@
 -- Fuck vim's shit default indentation off forever
 -- Replace it with my own correct indentation
 vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
-  callback = function()
-    vim.opt_local.autoindent = false
-    vim.opt_local.smartindent = false
-    vim.opt_local.cindent = false
-    vim.opt_local.indentexpr = ""
-  end,
+	callback = function()
+		vim.opt_local.autoindent = false
+		vim.opt_local.smartindent = false
+		vim.opt_local.cindent = false
+		vim.opt_local.indentexpr = ""
+	end,
 })
 
 -- disable netrw at the very start of your init.lua
@@ -50,7 +50,7 @@ vim.deprecate = function()
 end
 
 vim.api.nvim_create_autocmd('FileType', {
-	callback = function() 
+	callback = function()
 		vim.opt.modeline = false
 		vim.opt_local.expandtab = false
 		vim.opt_local.tabstop = 4
@@ -62,10 +62,10 @@ vim.api.nvim_create_autocmd('FileType', {
 
 
 vim.api.nvim_create_autocmd('FileType', {
-	pattern = {"c","cpp", "cs", "java", "rs", "rust"},
+	pattern = { "c", "cpp", "cs", "java", "rs", "rust" },
 	callback = function()
-		local indent_expr = {"{$", "%[$", "%($"}
-		local outdent_expr = {"^/*}", "^/*%]", "^/*%)"}
+		local indent_expr = { "{$", "%[$", "%($" }
+		local outdent_expr = { "^/*}", "^/*%]", "^/*%)" }
 		require("plugins/indentation_fixer").load(indent_expr, outdent_expr)
 	end,
 })
@@ -187,7 +187,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	desc = 'Highlight when yanking (copying) text',
 	group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
 	callback = function()
-	vim.highlight.on_yank()
+		vim.highlight.on_yank()
 	end,
 })
 
@@ -210,17 +210,17 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- Configure neovim's builtin LSP Client to start rust-analyzer
 -- If you're on ArchLinux, make sure you have the rustup and rust-analyzer packages installed
 vim.lsp.config("rust_analyzer", {
-	cmd = { "rust-analyzer"},
-	filetypes = {"rs", "rust"}
+	cmd = { "rust-analyzer" },
+	filetypes = { "rs", "rust" }
 })
 vim.lsp.enable("rust_analyzer")
 
 
 
 -- C/C++ LSP
--- Configure neovim's builtin LSP Client to start ccls 
+-- Configure neovim's builtin LSP Client to start ccls
 vim.lsp.config("ccls", {
-	filetypes = {"c", "cpp", "h", "hpp"}
+	filetypes = { "c", "cpp", "h", "hpp" }
 })
 vim.lsp.enable("ccls")
 
@@ -228,7 +228,7 @@ vim.lsp.enable("ccls")
 -- Lua LSP
 -- Make sure lua-language-server is executable
 vim.lsp.config("lua_ls", {
-	filetypes = {"lua"},
+	filetypes = { "lua" },
 	settings = {
 		Lua = {
 			workspace = {
@@ -242,9 +242,9 @@ vim.lsp.enable("lua_ls")
 -- Give the diagnostic window a border
 local border_style = "rounded"
 vim.diagnostic.config({
-    float = {
-        border = border_style,
-    },
+	float = {
+		border = border_style,
+	},
 })
 
 
@@ -268,7 +268,7 @@ local plugins = {
 	require("plugins/load_gitsigns").get_plugin(),
 	require("plugins/load_which-key").get_plugin(),
 	require("plugins/load_telescope").get_plugin(),
-	
+
 	-- Colour themes
 	--require("plugins/load_tokyonight").get_plugin(),
 	require("plugins/load_catppuccin").get_plugin(),
@@ -280,17 +280,17 @@ local plugins = {
 			require('nvim-highlight-colors').setup({})
 		end
 	},
-	
+
 	-- Status bar
 	require("plugins/load_feline").get_plugin(),
-	
+
 	-- Highlight, edit, and navigate code
 	require("plugins/load_nvim-treesitter").get_plugin(),
 	{
 		"m4xshen/autoclose.nvim",
 		config = function()
 			require('autoclose').setup({
-				[";"] = { escape = false, close = false}
+				[";"] = { escape = false, close = false }
 			})
 		end
 	},
@@ -315,131 +315,154 @@ local plugins = {
 		-- This is a helper that provides default configurations for LSP Clients
 		"neovim/nvim-lspconfig",
 		config = function()
-
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 			local lspconfig = require('lspconfig')
-
 		end
+	},
+	{
+		"m4xshen/hardtime.nvim",
+		lazy = false,
+		dependencies = { "MunifTanjim/nui.nvim" },
+		opts = {},
+	},
+	{
+		"nvzone/volt",
+		lazy = true,
+	},
+	{
+		"nvzone/menu",
+		config = function()
+			print("Hi")
+			vim.keymap.set("n", "<C-t>", function()
+				require("menu").open("default")
+			end, {})
+		end
+	},
+	{
+		"rcarriga/nvim-notify",
+		config = function()
+			vim.notify = require("notify")
+		end,
 	},
 	{
 		-- Completiom framework
 		"hrsh7th/nvim-cmp",
 		config = function()
-			local cmp = require'cmp'
+			local cmp = require 'cmp'
 			local lspkind = require('lspkind')
 			cmp.setup({
-			preselect = cmp.PreselectMode.None, -- Do not suggest a default option. Fixes a big annoyance
-			-- Enable LSP snippets
-			snippet = {
-				expand = function(args)
-					vim.fn["vsnip#anonymous"](args.body)
-				end,
-			},
-			mapping = {
-				['<C-p>'] = cmp.mapping.select_prev_item(),
-				['<C-n>'] = cmp.mapping.select_next_item(),
-				-- Add tab support
-				['<S-Tab>'] = cmp.mapping.select_prev_item(),
-				['<Tab>'] = cmp.mapping.select_next_item(),
-				['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
-				['<C-f>'] = cmp.mapping.scroll_docs(4),
-				['<C-Space>'] = cmp.mapping.complete(),
-				['<C-e>'] = cmp.mapping.close(),
-				--['<CR>'] = cmp.mapping.confirm({
-				--  behavior = cmp.ConfirmBehavior.Insert,
-				--  select = true,
-				--})
-			},
-			-- Installed sources:
-			sources = {
-				{ name = 'path' },                              -- file paths
-				{ name = 'nvim_lsp', keyword_length = 1 },      -- from language server
-				{ name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
-				{ name = 'nvim_lua', keyword_length = 1},       -- complete neovim's Lua runtime API such vim.lsp.*
-				--{ name = 'buffer', keyword_length = 1 },        -- source current buffer. Don't really want this one, it gives suggestions for "text" which loads before anything else, making it feel slow
-				{ name = 'vsnip', keyword_length = 1 },         -- nvim-cmp source for vim-vsnip 
-				{ name = 'calc'},                               -- source for math calculation
-			  },
-			  window = {
-				  completion = cmp.config.window.bordered({border = border_style}),
-				  documentation = cmp.config.window.bordered({border = border_style}),
-			  },
-			  formatting = {
-				fields = { 'icon', 'abbr', 'kind', 'menu' },
-				format = lspkind.cmp_format({
-					maxwidth = {
-						-- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-						-- can also be a function to dynamically calculate max width such as
-						-- menu = function() return math.floor(0.45 * vim.o.columns) end,
-						menu = 50, -- leading text (labelDetails)
-						abbr = function() return math.floor(0.25 * vim.o.columns) end, -- actual suggestion item
-					},
-					ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-					show_labelDetails = true, -- show labelDetails in menu. Disabled by default
-					symbol_map = {
-						--Text = "󰉿",
-						Text = "",
-						Method = "󰆧",
-						Function = "󰊕",
-						Constructor = "",
-						Field = "󰜢",
-						Variable = "󰀫",
-						Class = "󰠱",
-						Interface = "",
-						Module = "",
-						Property = "󰜢",
-						Unit = "󰑭",
-						Value = "󰎠",
-						Enum = "",
-						Keyword = "󰌋",
-						Snippet = "",
-						Color = "󰏘",
-						File = "󰈙",
-						Reference = "󰈇",
-						Folder = "󰉋",
-						EnumMember = "",
-						Constant = "󰏿",
-						Struct = "󰙅",
-						Event = "",
-						Operator = "󰆕",
-						TypeParameter = "", -- Fill in missing one
-					},
-					-- The function below will be called before any actual modifications from lspkind
-					-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-					before = function (entry, vim_item)
-						local test = {
-							--Text					= "         Text",
-							Text					= " ",
-							Method					= "       Method",
-							Function				= "     Function",
-							Constructor				= "  Constructor",
-							Field					= "        Field",
-							Variable				= "     Variable",
-							Class					= "        Class",
-							Interface				= "    Interface",
-							Module					= "       Module",
-							Property				= "     Property",
-							Unit					= "         Unit",
-							Value					= "        Value",
-							Enum					= "         Enum",
-							Keyword					= "      Keyword",
-							Snippet					= "      Snippet",
-							Color					= "        Color",
-							File					= "         File",
-							Reference				= "    Reference",
-							Folder					= "       Folder",
-							EnumMember				= "   EnumMember",
-							Constant				= "     Constant",
-							Struct					= "       Struct",
-							Event					= "        Event",
-							Operator				= "     Operator",
-							TypeParameter			= "TypeParameter",
-						}
-						vim_item.kind = test[vim_item.kind]
-						return vim_item
-					end
-				})
-			  },
+				preselect = cmp.PreselectMode.None, -- Do not suggest a default option. Fixes a big annoyance
+				-- Enable LSP snippets
+				snippet = {
+					expand = function(args)
+						vim.fn["vsnip#anonymous"](args.body)
+					end,
+				},
+				mapping = {
+					['<C-p>'] = cmp.mapping.select_prev_item(),
+					['<C-n>'] = cmp.mapping.select_next_item(),
+					-- Add tab support
+					['<S-Tab>'] = cmp.mapping.select_prev_item(),
+					['<Tab>'] = cmp.mapping.select_next_item(),
+					['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
+					['<C-f>'] = cmp.mapping.scroll_docs(4),
+					['<C-Space>'] = cmp.mapping.complete(),
+					['<C-e>'] = cmp.mapping.close(),
+					--['<CR>'] = cmp.mapping.confirm({
+					--  behavior = cmp.ConfirmBehavior.Insert,
+					--  select = true,
+					--})
+				},
+				-- Installed sources:
+				sources = {
+					{ name = 'path' },         -- file paths
+					{ name = 'nvim_lsp',               keyword_length = 1 }, -- from language server
+					{ name = 'nvim_lsp_signature_help' }, -- display function signatures with current parameter emphasized
+					{ name = 'nvim_lua',               keyword_length = 1 }, -- complete neovim's Lua runtime API such vim.lsp.*
+					--{ name = 'buffer', keyword_length = 1 },        -- source current buffer. Don't really want this one, it gives suggestions for "text" which loads before anything else, making it feel slow
+					{ name = 'vsnip',                  keyword_length = 1 }, -- nvim-cmp source for vim-vsnip
+					{ name = 'calc' },         -- source for math calculation
+				},
+				window = {
+					completion = cmp.config.window.bordered({ border = border_style }),
+					documentation = cmp.config.window.bordered({ border = border_style }),
+				},
+				formatting = {
+					fields = { 'icon', 'abbr', 'kind', 'menu' },
+					format = lspkind.cmp_format({
+						maxwidth = {
+							-- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+							-- can also be a function to dynamically calculate max width such as
+							-- menu = function() return math.floor(0.45 * vim.o.columns) end,
+							menu = 50,                               -- leading text (labelDetails)
+							abbr = function() return math.floor(0.25 * vim.o.columns) end, -- actual suggestion item
+						},
+						ellipsis_char = '...',                       -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true,                    -- show labelDetails in menu. Disabled by default
+						symbol_map = {
+							--Text = "󰉿",
+							Text = "",
+							Method = "󰆧",
+							Function = "󰊕",
+							Constructor = "",
+							Field = "󰜢",
+							Variable = "󰀫",
+							Class = "󰠱",
+							Interface = "",
+							Module = "",
+							Property = "󰜢",
+							Unit = "󰑭",
+							Value = "󰎠",
+							Enum = "",
+							Keyword = "󰌋",
+							Snippet = "",
+							Color = "󰏘",
+							File = "󰈙",
+							Reference = "󰈇",
+							Folder = "󰉋",
+							EnumMember = "",
+							Constant = "󰏿",
+							Struct = "󰙅",
+							Event = "",
+							Operator = "󰆕",
+							TypeParameter = "", -- Fill in missing one
+						},
+						-- The function below will be called before any actual modifications from lspkind
+						-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+						before = function(entry, vim_item)
+							local test = {
+								--Text					= "         Text",
+								Text          = " ",
+								Method        = "       Method",
+								Function      = "     Function",
+								Constructor   = "  Constructor",
+								Field         = "        Field",
+								Variable      = "     Variable",
+								Class         = "        Class",
+								Interface     = "    Interface",
+								Module        = "       Module",
+								Property      = "     Property",
+								Unit          = "         Unit",
+								Value         = "        Value",
+								Enum          = "         Enum",
+								Keyword       = "      Keyword",
+								Snippet       = "      Snippet",
+								Color         = "        Color",
+								File          = "         File",
+								Reference     = "    Reference",
+								Folder        = "       Folder",
+								EnumMember    = "   EnumMember",
+								Constant      = "     Constant",
+								Struct        = "       Struct",
+								Event         = "        Event",
+								Operator      = "     Operator",
+								TypeParameter = "TypeParameter",
+							}
+							vim_item.kind = test[vim_item.kind]
+							return vim_item
+						end
+					})
+				},
 			})
 		end
 	},
@@ -448,7 +471,7 @@ local plugins = {
 		"onsails/lspkind.nvim"
 	},
 	{
-		-- Provides nvim-cmp with information from 
+		-- Provides nvim-cmp with information from
 		-- LSP completion source
 		"hrsh7th/cmp-nvim-lsp",
 	},
@@ -481,14 +504,14 @@ local plugins = {
 		"simrat39/rust-tools.nvim",
 		config = function()
 			local rt = require("rust-tools")
-			
+
 			rt.setup({
 				server = {
 					on_attach = function(_, bufnr)
-					-- Hover actions
-					vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-					-- Code action groups
-					vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+						-- Hover actions
+						vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+						-- Code action groups
+						vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
 					end,
 				},
 			})
@@ -523,8 +546,6 @@ local plugins = {
 			vim.keymap.set('n', '<leader>rc', ':RunClose<CR>', { noremap = true, silent = false })
 			vim.keymap.set('n', '<leader>crf', ':CRFiletype<CR>', { noremap = true, silent = false })
 			vim.keymap.set('n', '<leader>crp', ':CRProjects<CR>', { noremap = true, silent = false })
-
-
 		end,
 	},
 
@@ -563,18 +584,15 @@ require('lazy').setup(plugins, {
 -- noselect: Do not select, force to select one from the menu
 -- shortness: avoid showing extra messages when using completion
 -- updatetime: set updatetime for CursorHold
-vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
-vim.opt.shortmess = vim.opt.shortmess + { c = true}
+vim.opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
+vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.api.nvim_set_option('updatetime', 300)
 
 -- Fixed column for diagnostics to appear
 -- Show autodiagnostic popup on cursor hover_range
--- Goto previous / next diagnostic warning / error 
--- Show inlay_hints more frequently 
+-- Goto previous / next diagnostic warning / error
+-- Show inlay_hints more frequently
 vim.cmd([[
 	set signcolumn=yes
 	autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
-
-
-
